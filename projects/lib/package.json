@@ -1,6 +1,6 @@
 {
   "name": "@pdtec/ngx-observable-lifecycle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "peerDependencies": {
     "@angular/core": ">= 8.0.0",
     "rxjs": ">= 6.0.0",
