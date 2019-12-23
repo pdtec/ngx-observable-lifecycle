@@ -14,3 +14,4 @@ export { WithOnDestroy$, OnDestroy$ } from './lib/hooks/on-destroy';
 export { WithObservableOnInit, IOnInit$ } from './lib/hooks/on-init';
 
 export { takeUntilDestroyed } from './lib/operators/take-until-destroyed';
+export { onInput } from './lib/operators/on-input';
