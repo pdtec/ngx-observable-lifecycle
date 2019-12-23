@@ -1,4 +1,4 @@
-# @pdtec/ngx-observable-lifecycle
+# ngx-observable-lifecycle
 
 Library to wrap Angular lifecycle hooks in RxJS Observables.
 
@@ -23,7 +23,7 @@ If none of these is true (most of the time), keep it simple and skip mixins for 
 * if you want to use more than one lifecycle-hook-observable at the same time
 * if your component class already has a base class
 
-For a general introduction to mixins please read [Mixins on TypeScript Deep Dive](https://basarat.gitbooks.io/typescript/docs/types/mixins.html)
+For a general introduction to mixins please read [Mixins on TypeScript Deep Dive](https://basarat.gitbooks.io/typescript/docs/types/mixins.html).
 
 For each [Angular lifecycle hook](https://angular.io/guide/lifecycle-hooks) there is one mixin and one base class.
 E.g. mixin ```WithOnDestroy$``` and class ```OnDestroy$``` implement ```OnDestroy``` with its method ```ngOnDestroy```.
