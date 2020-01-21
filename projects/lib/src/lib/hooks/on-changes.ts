@@ -1,7 +1,7 @@
 import { OnChanges, OnDestroy, SimpleChanges, Type } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
-export type TypedChange<T> = {
+export interface TypedChange<T> {
   readonly previousValue: T | undefined;
   readonly currentValue: T;
   readonly firstChange: boolean;
@@ -9,12 +9,12 @@ export type TypedChange<T> = {
 }
 
 export type TypedChanges<T> = {
-  readonly [P in keyof T]: TypedChange<T[P]>;
+  readonly [P in keyof T]?: TypedChange<T[P]>;
 };
 
 export interface IOnChanges$ {
-  ngOnChanges(changes: SimpleChanges);
   readonly ngOnChanges$: Observable<TypedChanges<this>>;
+  ngOnChanges(changes: SimpleChanges);
 }
 
 export function WithOnChanges$<T extends Type<any>>(): Type<IOnChanges$>;
