@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { OnChanges$, takeUntilDestroyed, WithAfterViewInit$, WithOnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
-import { onInput } from '../../../lib/src/lib/operators/on-input';
+import { OnChanges$, onInput, takeUntilDestroyed, WithOnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
 
 class OnChangesBase {
   // @Input()
@@ -12,7 +11,7 @@ class OnChangesBase {
 }
 
 // const Base = WithOnDestroy$(WithOnChanges$(OnChangesBase));
-const Base = WithAfterViewInit$(WithOnDestroy$(OnChanges$));
+const Base = WithOnDestroy$(OnChanges$);
 
 @Component({
   selector: 'app-on-changes',
@@ -20,22 +19,28 @@ const Base = WithAfterViewInit$(WithOnDestroy$(OnChanges$));
 })
 export class OnChangesComponent extends Base {
   @Input()
-  public value: number | undefined;
+  // public value: number = 5;
+  public value: number | undefined = 5;
 
   constructor() {
     super();
-
-    this.ngAfterViewInit$.subscribe(
-      () => console.log('ngAfterViewInit$ next'),
-      () => console.log('ngAfterViewInit$ error'),
-      () => console.log('ngAfterViewInit$ complete'),
-    );
 
     this.ngOnChanges$
       .pipe(
         onInput('value'),
         takeUntilDestroyed(this),
       )
-      .subscribe(change => console.log('ngOnChanges$ triggered'));
+      .subscribe(change => {
+        // change.currentValue.toFixed();
+        console.log('ngOnChanges$ triggered');
+      });
+
+    // this.ngOnChanges$
+    //   .pipe(
+    //     currentValueOf('value'),
+    //     map(value => value.toFixed()), // should not compile, could be undefined
+    //     takeUntilDestroyed(this),
+    //   )
+    //   .subscribe(change => console.log('ngOnChanges$ triggered'));
   }
 }
