@@ -9,9 +9,16 @@ export interface IAfterViewInit$ {
 export function WithAfterViewInit$<T extends Type<any>>(): Type<IAfterViewInit$>;
 export function WithAfterViewInit$<T extends Type<any>>(Base?: T): T & Type<IAfterViewInit$>;
 export function WithAfterViewInit$<T extends Type<any>>(Base?: T) {
-  return WithObservableLifecycleHook<AfterViewInit, IAfterViewInit$, T>(
-    'ngAfterViewInit', 'ngAfterViewInit$', Base
-  );
+  if (Base !== undefined) {
+    return WithObservableLifecycleHook<AfterViewInit, IAfterViewInit$, T>(
+      'ngAfterViewInit', 'ngAfterViewInit$', Base
+    );
+  }
+  else {
+    return WithObservableLifecycleHook<AfterViewInit, IAfterViewInit$, T>(
+      'ngAfterViewInit', 'ngAfterViewInit$'
+    );
+  }
 }
 
 export const AfterViewInit$ = WithAfterViewInit$();

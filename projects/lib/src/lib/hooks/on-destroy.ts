@@ -9,9 +9,16 @@ export interface IOnDestroy$ {
 export function WithOnDestroy$<T extends Type<any>>(): Type<IOnDestroy$>;
 export function WithOnDestroy$<T extends Type<any>>(Base?: T): T & Type<IOnDestroy$>;
 export function WithOnDestroy$<T extends Type<any>>(Base?: T) {
-  return WithObservableLifecycleHook<OnDestroy, IOnDestroy$, T>(
-    'ngOnDestroy', 'ngOnDestroy$', Base
-  );
+  if (Base !== undefined) {
+    return WithObservableLifecycleHook<OnDestroy, IOnDestroy$, T>(
+      'ngOnDestroy', 'ngOnDestroy$', Base
+    );
+  }
+  else {
+    return WithObservableLifecycleHook<OnDestroy, IOnDestroy$, T>(
+      'ngOnDestroy', 'ngOnDestroy$'
+    );
+  }
 }
 
 export const OnDestroy$ = WithOnDestroy$();

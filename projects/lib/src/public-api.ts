@@ -15,3 +15,4 @@ export { WithObservableOnInit, IOnInit$ } from './lib/hooks/on-init';
 
 export { takeUntilDestroyed } from './lib/operators/take-until-destroyed';
 export { onInput } from './lib/operators/on-input';
+export { currentValueOf } from './lib/operators/current-value-of';

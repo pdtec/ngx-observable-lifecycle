@@ -26,7 +26,7 @@ export function WithObservableLifecycleHook<H, H$, T extends Type<any>>(lifecycl
 
   Object.defineProperty(clazz.prototype, lifecycle, {
     get() {
-      return function(...args: any[]) {
+      return function(this: any, ...args: any[]) {
         this[lifecycle$].next(args[0]);
 
         if (lifecycle === 'ngOnDestroy') {
@@ -42,7 +42,7 @@ export function WithObservableLifecycleHook<H, H$, T extends Type<any>>(lifecycl
   if (lifecycle !== 'ngOnDestroy') {
     Object.defineProperty(clazz.prototype, 'ngOnDestroy', {
       get() {
-        return function(...args: any[]) {
+        return function(this: any, ...args: any[]) {
           this[lifecycle$].complete();
           callSuper(this, 'ngOnDestroy', args, Base);
         };
@@ -52,7 +52,7 @@ export function WithObservableLifecycleHook<H, H$, T extends Type<any>>(lifecycl
   }
 
   Object.defineProperty(clazz.prototype, observable, {
-    get() {
+    get(this: any) {
       return this[lifecycle$].asObservable();
     },
     enumerable: false,
