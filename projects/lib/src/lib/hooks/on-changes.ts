@@ -14,7 +14,7 @@ export type TypedChanges<T> = {
 
 export interface IOnChanges$ {
   readonly ngOnChanges$: Observable<TypedChanges<this>>;
-  ngOnChanges(changes: SimpleChanges);
+  ngOnChanges(changes: SimpleChanges): void;
 }
 
 export function WithOnChanges$<T extends Type<any>>(): Type<IOnChanges$>;
