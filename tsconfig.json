@@ -11,6 +11,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "strict": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -20,7 +21,7 @@
     ],
     "paths": {
       "@pdtec/ngx-observable-lifecycle": [
-        "projects/lib/src/public-api.ts"
+        "dist/lib"
       ]
     }
   },

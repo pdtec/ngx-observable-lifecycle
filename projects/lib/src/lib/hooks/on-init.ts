@@ -9,9 +9,16 @@ export interface IOnInit$ {
 export function WithObservableOnInit<T extends Type<any>>(): Type<IOnInit$>;
 export function WithObservableOnInit<T extends Type<any>>(Base?: T): T & Type<IOnInit$>;
 export function WithObservableOnInit<T extends Type<any>>(Base?: T) {
-  return WithObservableLifecycleHook<OnInit, IOnInit$, T>(
-    'ngOnInit', 'ngOnInit$', Base
-  );
+  if (Base !== undefined) {
+    return WithObservableLifecycleHook<OnInit, IOnInit$, T>(
+      'ngOnInit', 'ngOnInit$', Base
+    );
+  }
+  else {
+    return WithObservableLifecycleHook<OnInit, IOnInit$, T>(
+      'ngOnInit', 'ngOnInit$'
+    );
+  }
 }
 
 export const OnInit$ = WithObservableOnInit();

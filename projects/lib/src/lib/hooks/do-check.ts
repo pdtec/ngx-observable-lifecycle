@@ -9,9 +9,16 @@ export interface IDoCheck$ {
 export function WithDoCheck$<T extends Type<any>>(): Type<IDoCheck$>;
 export function WithDoCheck$<T extends Type<any>>(Base?: T): T & Type<IDoCheck$>;
 export function WithDoCheck$<T extends Type<any>>(Base?: T) {
-  return WithObservableLifecycleHook<DoCheck, IDoCheck$, T>(
-    'ngDoCheck', 'ngDoCheck$', Base
-  );
+  if (Base !== undefined) {
+    return WithObservableLifecycleHook<DoCheck, IDoCheck$, T>(
+      'ngDoCheck', 'ngDoCheck$', Base
+    );
+  }
+  else {
+    return WithObservableLifecycleHook<DoCheck, IDoCheck$, T>(
+      'ngDoCheck', 'ngDoCheck$'
+    );
+  }
 }
 
 export const DoCheck$ = WithDoCheck$();

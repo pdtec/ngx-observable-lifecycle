@@ -9,9 +9,17 @@ export interface IAfterContentChecked$ {
 export function WithAfterContentChecked$<T extends Type<any>>(): Type<IAfterContentChecked$>;
 export function WithAfterContentChecked$<T extends Type<any>>(Base?: T): T & Type<IAfterContentChecked$>;
 export function WithAfterContentChecked$<T extends Type<any>>(Base?: T) {
-  return WithObservableLifecycleHook<AfterContentChecked, IAfterContentChecked$, T>(
-    'ngAfterContentChecked', 'ngAfterContentChecked$', Base
-  );
+  if (Base !== undefined) {
+    return WithObservableLifecycleHook<AfterContentChecked, IAfterContentChecked$, T>(
+      'ngAfterContentChecked', 'ngAfterContentChecked$', Base
+    );
+  }
+  else {
+    return WithObservableLifecycleHook<AfterContentChecked, IAfterContentChecked$, T>(
+      'ngAfterContentChecked', 'ngAfterContentChecked$'
+    );
+  }
+
 }
 
 export const AfterContentChecked$ = WithAfterContentChecked$();

@@ -6,12 +6,12 @@ export function onInput<T, P extends keyof T>(property: P): (source: Observable<
   return (source: Observable<TypedChanges<T>>) => {
     return source
       .pipe(
-        filter(hasOwnProperty(property)),
         map(changes => changes[property]),
+        filter(function (x: TypedChange<T[P]> | undefined): x is TypedChange<T[P]> {
+          return x !== undefined;
+        }),
       );
   };
 }
 
-export function hasOwnProperty<T>(property: keyof T) {
-  return (changes: TypedChanges<T>) => changes.hasOwnProperty(property);
-}
+

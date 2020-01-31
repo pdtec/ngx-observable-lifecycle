@@ -9,9 +9,16 @@ export interface IAfterContentInit$ {
 export function WithAfterContentInit$<T extends Type<any>>(): Type<IAfterContentInit$>;
 export function WithAfterContentInit$<T extends Type<any>>(Base?: T): T & Type<IAfterContentInit$>;
 export function WithAfterContentInit$<T extends Type<any>>(Base?: T) {
-  return WithObservableLifecycleHook<AfterContentInit, IAfterContentInit$, T>(
-    'ngAfterContentInit', 'ngAfterContentInit$', Base
-  );
+  if (Base !== undefined) {
+    return WithObservableLifecycleHook<AfterContentInit, IAfterContentInit$, T>(
+      'ngAfterContentInit', 'ngAfterContentInit$', Base
+    );
+  }
+  else {
+    return WithObservableLifecycleHook<AfterContentInit, IAfterContentInit$, T>(
+      'ngAfterContentInit', 'ngAfterContentInit$'
+    );
+  }
 }
 
 export const AfterContentInit$ = WithAfterContentInit$();
