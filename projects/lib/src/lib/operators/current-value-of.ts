@@ -18,5 +18,3 @@ export function currentValueOf<T, P extends keyof T>(property: P): (source: Obse
       );
   };
 }
-
-
