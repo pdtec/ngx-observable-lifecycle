@@ -29,10 +29,12 @@ export function WithOnChanges$<T extends Type<any>>(/*Base?: T*/) {
     private [lifecycle$] = new ReplaySubject<any>(1);
 
     public ngOnChanges(changes: SimpleChanges) {
+      console.log(`ObservableLifecycle#ngOnChanges`);
       this[lifecycle$].next(changes);
     }
 
     public ngOnDestroy() {
+      console.log(`ObservableLifecycle#ngOnDestroy`);
       this[lifecycle$].complete();
     }
 
@@ -46,7 +48,9 @@ export function WithOnChanges$<T extends Type<any>>(/*Base?: T*/) {
 
 @Directive()
 class Dummy implements OnChanges {
-  ngOnChanges(changes: SimpleChanges) {}
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(`Dummy#ngOnChanges`);
+  }
 }
 
 export const OnChanges$ = WithOnChanges$();

@@ -2,6 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, OnDestroy } from '@angular/core';
 import { OnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
 
+function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
+  // first check on plain to ensure it works without the library
+  expect(fixture.componentInstance.ngOnDestroyCalled).toBe(calls);
+  // then check the library
+  expect(fixture.componentInstance.ngOnDestroy$triggered).toBe(calls);
+}
+
 describe('ngOnDestroy$ observable', () => {
 
   let fixture: ComponentFixture<TestComponent>;
@@ -20,48 +27,37 @@ describe('ngOnDestroy$ observable', () => {
 
   it('should forward call', async () => {
     expect(fixture.componentInstance.enabled).toBe(true);
-    expect(fixture.componentInstance.ngOnDestroy$triggered).toBe(false);
+    checkCalls(fixture, 0);
 
     fixture.detectChanges();
     await fixture.whenStable();
-    await fixture.whenRenderingDone();
+
+    checkCalls(fixture, 0);
 
     fixture.componentInstance.enabled = false;
 
     fixture.detectChanges();
     await fixture.whenStable();
-    await fixture.whenRenderingDone();
 
-    expect(fixture.componentInstance.ngOnDestroy$triggered).toBe(true);
+    checkCalls(fixture, 1);
   });
 });
-
-@Component({
-  selector: 'lib-test',
-  template: `<div *ngIf="enabled">
-    <lib-test-sub></lib-test-sub>
-    <lib-test-sub-plain></lib-test-sub-plain>
-  </div>`
-})
-class TestComponent {
-  enabled = true;
-  ngOnDestroy$triggered = false;
-}
 
 @Component({
   selector: 'lib-test-sub',
   template: `lib-test-sub`
 })
 class TestSubComponent extends OnDestroy$ {
-  constructor(private parent: TestComponent) {
+  constructor(private readonly parent: TestComponent) {
     super();
 
+    console.log(`TestSubComponent#constructor`);
+
     this.ngOnDestroy$.subscribe(() => {
-      console.log('TestSubComponent#ngOnDestroy$ triggered');
-      this.parent.ngOnDestroy$triggered = true;
+      console.log('TestSubComponent#ngOnDestroy$');
+      this.parent.ngOnDestroy$triggered++;
     });
 
-    console.log('TestSubComponent created');
   }
 }
 
@@ -71,11 +67,25 @@ class TestSubComponent extends OnDestroy$ {
 })
 class TestSubPlainComponent implements OnDestroy {
 
-  constructor() {
-    console.log('TestSubPlainComponent created');
+  constructor(private readonly parent: TestComponent) {
+    console.log(`TestSubPlainComponent#constructor`);
   }
 
   ngOnDestroy(): void {
-    console.log('TestSubPlainComponent#ngOnDestroy called');
+    console.log('TestSubPlainComponent#ngOnDestroy');
+    this.parent.ngOnDestroyCalled++;
   }
+}
+
+@Component({
+  selector: 'lib-test',
+  template: `<div *ngIf="enabled">
+    <lib-test-sub></lib-test-sub>
+    <lib-test-sub-plain></lib-test-sub-plain>
+  </div>`
+})
+class TestComponent {
+  public enabled = true;
+  public ngOnDestroyCalled = 0;
+  public ngOnDestroy$triggered = 0;
 }
