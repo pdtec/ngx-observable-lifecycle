@@ -1,65 +1,45 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, Input } from '@angular/core';
-import { OnChanges$, onInput } from '@pdtec/ngx-observable-lifecycle';
-import { map, tap } from 'rxjs/operators';
-import { TypedChanges } from '../hooks/on-changes';
-import { Observable } from 'rxjs';
+import { onInput } from '@pdtec/ngx-observable-lifecycle';
+import { Subject } from 'rxjs';
+import { TypedChange, TypedChanges } from '../hooks/on-changes';
+import { SimpleChange } from '@angular/core';
 
 describe('onInput operator', () => {
+  it('should pass value changes for requested property', () => {
+    const subject = new Subject<TypedChanges<TestComponent>>();
+    let lastChange: TypedChange<any> | undefined = undefined as any;
 
-  let fixture: ComponentFixture<TestOnInputComponent>;
+    subject
+      .pipe(onInput('value'))
+      .subscribe(change => lastChange = change);
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        TestOnInputComponent
-      ]
-    });
+    expect(lastChange).toBeUndefined();
+    subject.next({ value: new SimpleChange(0, 1, true) });
+    expect(lastChange).toBeDefined();
+    if (lastChange !== undefined) {
+      expect(lastChange.currentValue).toBeDefined(1);
+    }
 
-    fixture = TestBed.createComponent(TestOnInputComponent);
+
+    subject.complete();
   });
 
-  it('should create an instance', () => {
-    expect(fixture).toBeDefined();
-  });
+  it('should filter value changes for other properties', () => {
+    const subject = new Subject<TypedChanges<TestComponent>>();
+    let lastChange: TypedChange<any> | undefined = undefined as any;
 
-  it('should throw exception', () => {
-    expect(() => {
-      fixture.componentInstance.foobar = '';
-      fixture.detectChanges();
-      fixture.componentInstance.foobar = undefined;
-      fixture.detectChanges();
-    }).toThrow();
+    subject
+      .pipe(onInput('value'))
+      .subscribe(change => lastChange = change);
+
+    expect(lastChange).toBeUndefined();
+    subject.next({ unknown: new SimpleChange(false, true, true) });
+    expect(lastChange).toBeUndefined();
+
+    subject.complete();
   });
 });
 
-@Component({
-  template: ``
-})
-class TestOnInputComponent extends OnChanges$ {
-  @Input()
-  public foobar: string | undefined;
-
-  constructor() {
-    super();
-
-    // this.ngOnChanges$
-    (this.ngOnChanges$ as Observable<TypedChanges<TestOnInputComponent>>)
-      .subscribe(changes => {
-        const fooChange = changes.foobar;
-        console.log('changes', changes);
-      });
-
-    // this.ngOnChanges$
-    (this.ngOnChanges$ as Observable<TypedChanges<TestOnInputComponent>>)
-      .pipe(
-        // onInput('foobar'),
-        map(changes => changes.foobar),
-        tap(x => console.log('changes', x)),
-        map(change => change.currentValue),
-      )
-      .subscribe(x => {
-        x.startsWith(''); // shouldn't even compile without skipUndefined, x should be string | undefined
-      });
-  }
+class TestComponent {
+  public value: number | undefined;
+  public unknown: unknown;
 }
