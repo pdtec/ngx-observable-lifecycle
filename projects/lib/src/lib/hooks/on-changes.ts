@@ -1,4 +1,4 @@
-import { OnChanges, OnDestroy, SimpleChanges, Type } from '@angular/core';
+import { Directive, OnChanges, OnDestroy, SimpleChanges, Type } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 export interface TypedChange<T> {
@@ -25,7 +25,8 @@ export function WithOnChanges$<T extends Type<any>>(/*Base?: T*/) {
   // );
 
   const lifecycle$ = Symbol('ngOnChanges$');
-  return class ObservableLifecycle extends Dummy implements OnChanges, OnDestroy {
+
+  class ObservableLifecycle extends Dummy implements OnChanges, OnDestroy {
     private [lifecycle$] = new ReplaySubject<any>(1);
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -39,9 +40,12 @@ export function WithOnChanges$<T extends Type<any>>(/*Base?: T*/) {
     public get ngOnChanges$() {
       return this[lifecycle$].asObservable();
     }
-  };
+  }
+
+  return ObservableLifecycle;
 }
 
+@Directive()
 class Dummy implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {}
 }
