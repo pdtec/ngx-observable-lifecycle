@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AfterViewChecked, Component, Input, ViewChild } from '@angular/core';
-import { AfterViewChecked$ } from '@pdtec/ngx-observable-lifecycle';
+import { AfterViewChecked$ } from './after-view-checked';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, called: number) {
   // first check on plain to ensure it works without the library

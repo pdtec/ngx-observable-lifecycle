@@ -11,7 +11,8 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "demo:start": "ng serve",
+    "lib:start": "ng build --project=lib --prod --watch",
     "build": "run-s build:lib:ng build:lib:readme",
     "build:lib:ng": "ng build --project=lib --prod",
     "build:lib:readme": "cpx readme.md dist/lib/",

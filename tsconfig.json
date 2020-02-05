@@ -21,7 +21,7 @@
     ],
     "paths": {
       "@pdtec/ngx-observable-lifecycle": [
-        "projects/lib/src/public-api.ts"
+        "dist/lib"
       ]
     }
   },

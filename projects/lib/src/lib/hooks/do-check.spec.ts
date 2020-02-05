@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, DoCheck, ViewChild } from '@angular/core';
-import { DoCheck$ } from '@pdtec/ngx-observable-lifecycle';
+import { DoCheck$ } from './do-check';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, called: number) {
   // first check on plain to ensure it works without the library
