@@ -2,7 +2,7 @@ import { OnDestroy, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
 
-export interface IOnDestroy$ {
+export interface IOnDestroy$ extends OnDestroy {
   readonly ngOnDestroy$: Observable<void>;
 }
 

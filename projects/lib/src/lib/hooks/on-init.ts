@@ -2,7 +2,7 @@ import { OnInit, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
 
-export interface IOnInit$ {
+export interface IOnInit$ extends OnInit {
   readonly ngOnInit$: Observable<void>;
 }
 

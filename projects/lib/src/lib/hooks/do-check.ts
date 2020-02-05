@@ -2,7 +2,7 @@ import { DoCheck, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
 
-export interface IDoCheck$ {
+export interface IDoCheck$ extends DoCheck {
   readonly ngDoCheck$: Observable<void>;
 }
 

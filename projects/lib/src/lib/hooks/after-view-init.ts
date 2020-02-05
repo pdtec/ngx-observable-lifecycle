@@ -2,7 +2,7 @@ import { AfterViewInit, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
 
-export interface IAfterViewInit$ {
+export interface IAfterViewInit$ extends AfterViewInit {
   readonly ngAfterViewInit$: Observable<void>;
 }
 
