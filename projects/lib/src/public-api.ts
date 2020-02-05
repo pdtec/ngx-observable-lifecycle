@@ -11,7 +11,7 @@ export { WithAfterViewInit$, AfterViewInit$ } from './lib/hooks/after-view-init'
 export { WithDoCheck$, DoCheck$ } from './lib/hooks/do-check';
 export { WithOnChanges$, OnChanges$ } from './lib/hooks/on-changes';
 export { WithOnDestroy$, OnDestroy$ } from './lib/hooks/on-destroy';
-export { WithObservableOnInit, IOnInit$ } from './lib/hooks/on-init';
+export { WithObservableOnInit, OnInit$ } from './lib/hooks/on-init';
 
 export { takeUntilDestroyed } from './lib/operators/take-until-destroyed';
 export { onInput } from './lib/operators/on-input';
