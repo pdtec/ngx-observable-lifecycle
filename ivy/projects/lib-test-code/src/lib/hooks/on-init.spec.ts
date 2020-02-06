@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
-import { OnInit$ } from './on-init';
+import { OnInit$ } from '@pdtec/ngx-observable-lifecycle';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library

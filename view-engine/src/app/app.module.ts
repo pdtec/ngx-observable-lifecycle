@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent, LibDemoCodeModule } from 'lib-demo-code';
 
 @NgModule({
@@ -11,6 +10,8 @@ import { AppComponent, LibDemoCodeModule } from 'lib-demo-code';
     LibDemoCodeModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+  ]
 })
 export class AppModule { }

@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { AfterViewInit$ } from './after-view-init';
+import { Component, DoCheck, ViewChild } from '@angular/core';
+import { DoCheck$ } from '@pdtec/ngx-observable-lifecycle';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, called: number) {
   // first check on plain to ensure it works without the library
-  expect(fixture.componentInstance.plain.ngAfterViewInitCalled).toBe(called);
+  expect(fixture.componentInstance.plain.ngDoCheckCalled).toBe(called);
   // then check the library
-  expect(fixture.componentInstance.sub.ngAfterViewInit$triggered).toBe(called);
+  expect(fixture.componentInstance.sub.ngDoCheck$triggered).toBe(called);
 }
 
-describe('ngAfterViewInit$ observable', () => {
+describe('ngDoCheck$ observable', () => {
 
   let fixture: ComponentFixture<TestComponent>;
 
@@ -26,59 +26,57 @@ describe('ngAfterViewInit$ observable', () => {
   });
 
   it('should not trigger without change detection', async () => {
+    checkCalls(fixture, 0);
+
     await fixture.whenStable();
 
     checkCalls(fixture, 0);
   });
 
-  it('should trigger after init', async () => {
-    await fixture.detectChanges();
+  it('should trigger after change detection', async () => {
+    checkCalls(fixture, 0);
+
+    fixture.detectChanges();
     await fixture.whenStable();
 
     checkCalls(fixture, 1);
 
-    // init hook should only trigger once
+    // checked hook should be called for each change detection
 
-    await fixture.detectChanges();
+    fixture.detectChanges();
     await fixture.whenStable();
 
-    checkCalls(fixture, 1);
+    checkCalls(fixture, 2);
   });
 });
 
 @Component({
   selector: 'lib-test-sub',
-  template: `lib-test-sub`
+  template: ``
 })
-class TestSubComponent extends AfterViewInit$ {
-  ngAfterViewInit$triggered = 0;
+class TestSubComponent extends DoCheck$ {
+  ngDoCheck$triggered = 0;
 
   constructor() {
     super();
 
-    console.log(`TestSubComponent#constructor`);
-
-    this.ngAfterViewInit$.subscribe(() => {
-      console.log(`TestSubComponent#ngAfterViewInit$`);
-      this.ngAfterViewInit$triggered++;
+    this.ngDoCheck$.subscribe(() => {
+      this.ngDoCheck$triggered++;
     });
   }
 }
 
 @Component({
   selector: 'lib-test-sub-plain',
-  template: `lib-test-sub-plain`
+  template: ``
 })
-class TestSubPlainComponent implements AfterViewInit {
-  ngAfterViewInitCalled = 0;
+class TestSubPlainComponent implements DoCheck {
+  ngDoCheckCalled = 0;
 
-  constructor() {
-    console.log(`TestSubPlainComponent#constructor`);
-  }
+  constructor() {}
 
-  ngAfterViewInit(): void {
-    console.log(`TestSubPlainComponent#ngAfterViewInit`);
-    this.ngAfterViewInitCalled++;
+  ngDoCheck(): void {
+    this.ngDoCheckCalled++;
   }
 }
 
@@ -95,8 +93,4 @@ class TestComponent {
 
   @ViewChild(TestSubPlainComponent, {static: true})
   plain!: TestSubPlainComponent;
-
-  constructor() {
-    console.log(`TestComponent#constructor`);
-  }
 }

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist",
+    "skipLibCheck": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -11,8 +12,6 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "strict": true,
-    "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -37,6 +36,7 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    "enableIvy": false
   }
 }

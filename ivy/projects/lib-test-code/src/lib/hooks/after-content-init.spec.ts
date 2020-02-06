@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AfterContentChecked, Component, ViewChild } from '@angular/core';
-import { AfterContentChecked$ } from './after-content-checked';
+import { AfterContentInit, Component, ViewChild } from '@angular/core';
+import { AfterContentInit$ } from '@pdtec/ngx-observable-lifecycle';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library
-  expect(fixture.componentInstance.sub.ngAfterContentChecked$triggered).toBe(calls);
+  expect(fixture.componentInstance.plain.ngAfterContentInitCalled).toBe(calls);
   // then check the library
-  expect(fixture.componentInstance.plain.ngAfterContentCheckedCalled).toBe(calls);
+  expect(fixture.componentInstance.sub.ngAfterContentInit$triggered).toBe(calls);
 }
 
-describe('ngAfterContentChecked$ observable', () => {
+describe('ngAfterContentInit$ observable', () => {
 
   let fixture: ComponentFixture<TestComponent>;
 
@@ -26,30 +26,24 @@ describe('ngAfterContentChecked$ observable', () => {
   });
 
   it('should not trigger without change detection', async () => {
-    expect(fixture.componentInstance.input).toBe(0);
-
-    fixture.componentInstance.input = 1;
     await fixture.whenStable();
 
     checkCalls(fixture, 0);
   });
 
-  it('should trigger after change detection', async () => {
-    expect(fixture.componentInstance.input).toBe(0);
-
-    fixture.componentInstance.input = 1;
-    fixture.detectChanges();
+  it('should trigger after init', async () => {
+    await fixture.detectChanges();
     await fixture.whenStable();
 
     checkCalls(fixture, 1);
 
-    // do it again, this hook should be called multiple times
+    // init hook should be triggered only once
+    // so an additional change detection should not increase the call counter
 
-    fixture.componentInstance.input = 2;
-    fixture.detectChanges();
+    await fixture.detectChanges();
     await fixture.whenStable();
 
-    checkCalls(fixture, 2);
+    checkCalls(fixture, 1);
   });
 });
 
@@ -57,14 +51,17 @@ describe('ngAfterContentChecked$ observable', () => {
   selector: 'lib-test-sub',
   template: `<ng-content></ng-content>`
 })
-class TestSubComponent extends AfterContentChecked$ {
-  ngAfterContentChecked$triggered = 0;
+class TestSubComponent extends AfterContentInit$ {
+  ngAfterContentInit$triggered = 0;
 
   constructor() {
     super();
 
-    this.ngAfterContentChecked$.subscribe(() => {
-      this.ngAfterContentChecked$triggered++;
+    console.log(`TestSubComponent#constructor`);
+
+    this.ngAfterContentInit$.subscribe(() => {
+      console.log(`TestSubComponent#ngAfterContentInit$`);
+      this.ngAfterContentInit$triggered++;
     });
   }
 }
@@ -73,13 +70,16 @@ class TestSubComponent extends AfterContentChecked$ {
   selector: 'lib-test-sub-plain',
   template: `<ng-content></ng-content>`
 })
-class TestSubPlainComponent implements AfterContentChecked {
-  ngAfterContentCheckedCalled = 0;
+class TestSubPlainComponent implements AfterContentInit {
+  ngAfterContentInitCalled = 0;
 
-  constructor() {}
+  constructor() {
+    console.log(`TestSubPlainComponent#constructor`);
+  }
 
-  ngAfterContentChecked(): void {
-    this.ngAfterContentCheckedCalled++;
+  ngAfterContentInit(): void {
+    console.log(`TestSubPlainComponent#ngAfterContentInit`);
+    this.ngAfterContentInitCalled++;
   }
 }
 
@@ -87,19 +87,21 @@ class TestSubPlainComponent implements AfterContentChecked {
   selector: 'lib-test',
   template: `
     <lib-test-sub>
-      {{input}}
+      content
     </lib-test-sub>
     <lib-test-sub-plain>
-      {{input}}
+      content
     </lib-test-sub-plain>
   `
 })
 class TestComponent {
-  input = 0;
-
   @ViewChild(TestSubComponent, {static: true})
   sub!: TestSubComponent;
 
   @ViewChild(TestSubPlainComponent, {static: true})
   plain!: TestSubPlainComponent;
+
+  constructor() {
+    console.log(`TestComponent#constructor`);
+  }
 }

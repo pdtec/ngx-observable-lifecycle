@@ -1,7 +1,6 @@
 import { Subject } from 'rxjs';
-import { TypedChange, TypedChanges } from '../hooks/on-changes';
 import { SimpleChange } from '@angular/core';
-import { onInput } from './on-input';
+import { TypedChange, TypedChanges } from '@pdtec/ngx-observable-lifecycle';
 
 describe('onInput operator', () => {
   it('should pass value changes for requested property', () => {

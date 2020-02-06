@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, OnDestroy } from '@angular/core';
-import { OnDestroy$ } from './on-destroy';
+import { OnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library

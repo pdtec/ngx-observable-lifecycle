@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { OnChanges$ } from './on-changes';
+import { OnChanges$ } from '@pdtec/ngx-observable-lifecycle';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library
@@ -63,7 +63,7 @@ describe('ngOnChanges$ observable', () => {
   selector: 'lib-test-obs',
   template: `<div>{{input}}</div>`
 })
-class TestSubComponent extends OnChanges$ implements OnChanges {
+class TestSubComponent extends OnChanges$ {
   private input_ = 0;
 
   public inputSet = 0;
@@ -89,11 +89,6 @@ class TestSubComponent extends OnChanges$ implements OnChanges {
       console.log(`TestObsComponent#ngOnChanges$ triggered`);
       this.ngOnChanges$triggered++;
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(`TestObsComponent#ngOnChanges`);
-    super.ngOnChanges(changes);
   }
 }
 

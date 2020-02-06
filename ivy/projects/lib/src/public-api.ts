@@ -9,7 +9,7 @@ export { WithAfterContentInit$, AfterContentInit$ } from './lib/hooks/after-cont
 export { WithAfterViewChecked$, AfterViewChecked$ } from './lib/hooks/after-view-checked';
 export { WithAfterViewInit$, AfterViewInit$ } from './lib/hooks/after-view-init';
 export { WithDoCheck$, DoCheck$ } from './lib/hooks/do-check';
-export { WithOnChanges$, OnChanges$ } from './lib/hooks/on-changes';
+export { WithOnChanges$, OnChanges$, TypedChanges, TypedChange } from './lib/hooks/on-changes';
 export { WithOnDestroy$, OnDestroy$ } from './lib/hooks/on-destroy';
 export { WithObservableOnInit, OnInit$ } from './lib/hooks/on-init';
 

@@ -16,12 +16,14 @@ const Base = WithOnDestroy$(OnChanges$);
 
 @Component({
   selector: 'app-on-changes',
-  template: '<div>Input Value: {{value}}</div>',
+  template: '<div>Input Value via Observable: {{valueFromObservable}}</div>',
 })
 export class OnChangesComponent extends Base {
   @Input()
   // public value: number = 5;
   public value: number | undefined = 5;
+
+  public valueFromObservable: number | undefined;
 
   constructor() {
     super();
@@ -41,6 +43,9 @@ export class OnChangesComponent extends Base {
         // map(value => value.toFixed()), // should not compile, could be undefined
         takeUntilDestroyed(this),
       )
-      .subscribe(change => console.log('value changed'));
+      .subscribe(change => {
+        this.valueFromObservable = change;
+        console.log('value changed');
+      });
   }
 }

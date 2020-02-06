@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { takeUntilDestroyed, WithOnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
+import { OnDestroy$, takeUntilDestroyed } from '@pdtec/ngx-observable-lifecycle';
 import { ObservableService } from './observable.service';
 
 class ComponentBaseClass implements OnInit, OnDestroy {
@@ -22,7 +22,7 @@ class ComponentBaseClass implements OnInit, OnDestroy {
     <app-on-changes [value]="value"></app-on-changes>
   `,
 })
-export class Child2Component extends WithOnDestroy$(ComponentBaseClass) {
+export class Child2Component extends OnDestroy$ {
   public value: number | undefined;
 
   constructor(service: ObservableService) {
