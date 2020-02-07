@@ -11,4 +11,6 @@ import './lib/hooks/on-changes.spec';
 import './lib/hooks/on-destroy.spec';
 import './lib/hooks/on-init.spec';
 
+import './lib/operators/on-input.spec';
+
 export function runTests() {}
