@@ -1,5 +1,6 @@
-import { Directive, OnChanges, OnDestroy, SimpleChanges, Type } from '@angular/core';
+import { OnChanges, SimpleChanges } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
+import { OnDestroy$ } from './on-destroy';
 
 export interface TypedChange<T> {
   readonly previousValue: T | undefined;
@@ -16,41 +17,19 @@ export interface IOnChanges$ extends OnChanges {
   readonly ngOnChanges$: Observable<TypedChanges<this>>;
 }
 
-export function WithOnChanges$<T extends Type<any>>(): Type<IOnChanges$>;
-// export function WithOnChanges$<T extends Type<any>>(Base?: T): T & Type<IOnChanges$> & Type<AOnChanges$>;
-export function WithOnChanges$<T extends Type<any>>(/*Base?: T*/) {
-  // return WithObservableLifecycleHook<OnChanges, IOnChanges$, T>(
-  //   'ngOnChanges', 'ngOnChanges$', Base
-  // );
+export class OnChanges$ extends OnDestroy$ implements IOnChanges$ {
+  private ngOnChanges$_ = new ReplaySubject<TypedChanges<this>>(1);
 
-  const lifecycle$ = Symbol('ngOnChanges$');
-
-  class ObservableLifecycle extends Dummy implements OnChanges, OnDestroy {
-    private [lifecycle$] = new ReplaySubject<any>(1);
-
-    public ngOnChanges(changes: SimpleChanges) {
-      console.log(`ObservableLifecycle#ngOnChanges`);
-      this[lifecycle$].next(changes);
-    }
-
-    public ngOnDestroy() {
-      console.log(`ObservableLifecycle#ngOnDestroy`);
-      this[lifecycle$].complete();
-    }
-
-    public get ngOnChanges$() {
-      return this[lifecycle$].asObservable();
-    }
+  get ngOnChanges$() {
+    return this.ngOnChanges$_.asObservable();
   }
 
-  return ObservableLifecycle;
-}
+  ngOnChanges(changes: SimpleChanges): void {
+    this.ngOnChanges$_.next(changes as any);
+  }
 
-@Directive()
-class Dummy implements OnChanges {
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(`Dummy#ngOnChanges`);
+  ngOnDestroy(): void {
+    this.ngOnChanges$_.complete();
+    super.ngOnDestroy();
   }
 }
-
-export const OnChanges$ = WithOnChanges$();

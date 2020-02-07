@@ -1,14 +1,14 @@
 import { Subject } from 'rxjs';
 import { SimpleChange } from '@angular/core';
-import { onInput, TypedChange, TypedChanges } from '@pdtec/ngx-observable-lifecycle';
+import { onlyChangesOf, TypedChange, TypedChanges } from '@pdtec/ngx-observable-lifecycle';
 
-describe('onInput operator', () => {
+describe('onlyChangesOf operator', () => {
   it('should pass value changes for requested property', () => {
     const subject = new Subject<TypedChanges<TestComponent>>();
     let lastChange: TypedChange<any> | undefined = undefined as any;
 
     subject
-      .pipe(onInput('value'))
+      .pipe(onlyChangesOf('value'))
       .subscribe(change => lastChange = change);
 
     expect(lastChange).toBeUndefined();
@@ -27,7 +27,7 @@ describe('onInput operator', () => {
     let lastChange: TypedChange<any> | undefined = undefined as any;
 
     subject
-      .pipe(onInput('value'))
+      .pipe(onlyChangesOf('value'))
       .subscribe(change => lastChange = change);
 
     expect(lastChange).toBeUndefined();

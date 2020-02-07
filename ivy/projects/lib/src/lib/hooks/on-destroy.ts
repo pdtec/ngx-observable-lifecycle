@@ -1,24 +1,19 @@
-import { OnDestroy, Type } from '@angular/core';
-import { Observable } from 'rxjs';
-import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
+import { OnDestroy } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
 
 export interface IOnDestroy$ extends OnDestroy {
   readonly ngOnDestroy$: Observable<void>;
 }
 
-export function WithOnDestroy$<T extends Type<any>>(): Type<IOnDestroy$>;
-export function WithOnDestroy$<T extends Type<any>>(Base?: T): T & Type<IOnDestroy$>;
-export function WithOnDestroy$<T extends Type<any>>(Base?: T) {
-  if (Base !== undefined) {
-    return WithObservableLifecycleHook<OnDestroy, IOnDestroy$, T>(
-      'ngOnDestroy', 'ngOnDestroy$', Base
-    );
+export class OnDestroy$ implements IOnDestroy$ {
+  private ngOnDestroy$_ = new ReplaySubject<void>(1);
+
+  get ngOnDestroy$() {
+    return this.ngOnDestroy$_.asObservable();
   }
-  else {
-    return WithObservableLifecycleHook<OnDestroy, IOnDestroy$, T>(
-      'ngOnDestroy', 'ngOnDestroy$'
-    );
+
+  ngOnDestroy(): void {
+    this.ngOnDestroy$_.next();
+    this.ngOnDestroy$_.complete();
   }
 }
-
-export const OnDestroy$ = WithOnDestroy$();

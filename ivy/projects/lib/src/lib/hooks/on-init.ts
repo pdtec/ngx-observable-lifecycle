@@ -1,24 +1,20 @@
-import { OnInit, Type } from '@angular/core';
-import { Observable } from 'rxjs';
-import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
+import { OnInit } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
+import { OnDestroy$ } from './on-destroy';
 
 export interface IOnInit$ extends OnInit {
   readonly ngOnInit$: Observable<void>;
 }
 
-export function WithObservableOnInit<T extends Type<any>>(): Type<IOnInit$>;
-export function WithObservableOnInit<T extends Type<any>>(Base?: T): T & Type<IOnInit$>;
-export function WithObservableOnInit<T extends Type<any>>(Base?: T) {
-  if (Base !== undefined) {
-    return WithObservableLifecycleHook<OnInit, IOnInit$, T>(
-      'ngOnInit', 'ngOnInit$', Base
-    );
+export class OnInit$ extends OnDestroy$ implements IOnInit$ {
+  private ngOnInit$_ = new ReplaySubject<void>(1);
+
+  ngOnInit(): void {
+    this.ngOnInit$_.next();
+    this.ngOnInit$_.complete();
   }
-  else {
-    return WithObservableLifecycleHook<OnInit, IOnInit$, T>(
-      'ngOnInit', 'ngOnInit$'
-    );
+
+  get ngOnInit$() {
+    return this.ngOnInit$_.asObservable();
   }
 }
-
-export const OnInit$ = WithObservableOnInit();

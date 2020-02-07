@@ -1,24 +1,20 @@
-import { AfterContentInit, Type } from '@angular/core';
-import { Observable } from 'rxjs';
-import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
+import { AfterContentInit } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
+import { OnDestroy$ } from './on-destroy';
 
 export interface IAfterContentInit$ extends AfterContentInit {
   readonly ngAfterContentInit$: Observable<void>;
 }
 
-export function WithAfterContentInit$<T extends Type<any>>(): Type<IAfterContentInit$>;
-export function WithAfterContentInit$<T extends Type<any>>(Base?: T): T & Type<IAfterContentInit$>;
-export function WithAfterContentInit$<T extends Type<any>>(Base?: T) {
-  if (Base !== undefined) {
-    return WithObservableLifecycleHook<AfterContentInit, IAfterContentInit$, T>(
-      'ngAfterContentInit', 'ngAfterContentInit$', Base
-    );
+export class AfterContentInit$ extends OnDestroy$ implements IAfterContentInit$ {
+  private ngAfterContentInit$_ = new ReplaySubject<void>(1);
+
+  get ngAfterContentInit$() {
+    return this.ngAfterContentInit$_.asObservable();
   }
-  else {
-    return WithObservableLifecycleHook<AfterContentInit, IAfterContentInit$, T>(
-      'ngAfterContentInit', 'ngAfterContentInit$'
-    );
+
+  ngAfterContentInit(): void {
+    this.ngAfterContentInit$_.next();
+    this.ngAfterContentInit$_.complete();
   }
 }
-
-export const AfterContentInit$ = WithAfterContentInit$();

@@ -1,24 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { currentValueOf, OnChanges$, takeUntilDestroyed, WithOnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
-import { map } from 'rxjs/operators';
+import { input$, OnChanges$, takeUntilDestroyed } from '@pdtec/ngx-observable-lifecycle';
 
-class OnChangesBase {
-  // @Input()
-  // public value: number | undefined;
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   console.log('base class ngOnChanges');
-  // }
-}
-
-// const Base = WithOnDestroy$(WithOnChanges$(OnChangesBase));
-const Base = WithOnDestroy$(OnChanges$);
 
 @Component({
   selector: 'app-on-changes',
   template: '<div>Input Value via Observable: {{valueFromObservable}}</div>',
 })
-export class OnChangesComponent extends Base {
+export class OnChangesComponent extends OnChanges$ {
   @Input()
   // public value: number = 5;
   public value: number | undefined = 5;
@@ -36,15 +24,9 @@ export class OnChangesComponent extends Base {
         console.log('ngOnChanges$ triggered');
       });
 
-    this.ngOnChanges$
-      .pipe(
-        currentValueOf('value'),
-        map(value => value), // just to import map always
-        // map(value => value.toFixed()), // should not compile, could be undefined
-        takeUntilDestroyed(this),
-      )
-      .subscribe(change => {
-        this.valueFromObservable = change;
+    input$(this, 'value')
+      .subscribe(value => {
+        this.valueFromObservable = value;
         console.log('value changed');
       });
   }

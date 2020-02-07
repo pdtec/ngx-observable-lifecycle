@@ -1,25 +1,24 @@
-import { AfterContentChecked, Type } from '@angular/core';
-import { Observable } from 'rxjs';
-import { WithObservableLifecycleHook } from '../with-observable-lifecycle-hook';
+import { AfterContentChecked } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
+import { OnDestroy$ } from './on-destroy';
 
 export interface IAfterContentChecked$ extends AfterContentChecked {
   readonly ngAfterContentChecked$: Observable<void>;
 }
 
-export function WithAfterContentChecked$<T extends Type<any>>(): Type<IAfterContentChecked$>;
-export function WithAfterContentChecked$<T extends Type<any>>(Base?: T): T & Type<IAfterContentChecked$>;
-export function WithAfterContentChecked$<T extends Type<any>>(Base?: T) {
-  if (Base !== undefined) {
-    return WithObservableLifecycleHook<AfterContentChecked, IAfterContentChecked$, T>(
-      'ngAfterContentChecked', 'ngAfterContentChecked$', Base
-    );
-  }
-  else {
-    return WithObservableLifecycleHook<AfterContentChecked, IAfterContentChecked$, T>(
-      'ngAfterContentChecked', 'ngAfterContentChecked$'
-    );
+export class AfterContentChecked$ extends OnDestroy$ implements IAfterContentChecked$ {
+  private ngAfterContentChecked$_ = new ReplaySubject<void>(1);
+
+  get ngAfterContentChecked$() {
+    return this.ngAfterContentChecked$_.asObservable();
   }
 
+  ngAfterContentChecked(): void {
+    this.ngAfterContentChecked$_.next();
+  }
+
+  ngOnDestroy(): void {
+    this.ngAfterContentChecked$_.complete();
+    super.ngOnDestroy();
+  }
 }
-
-export const AfterContentChecked$ = WithAfterContentChecked$();
