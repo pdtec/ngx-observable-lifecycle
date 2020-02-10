@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { Component, QueryList, ViewChildren } from '@angular/core';
-import { AfterViewInit$, viewChildren, viewChildren$ } from '@pdtec/ngx-observable-lifecycle';
+import { AfterViewInit$AndOnDestroy$, viewChildren, viewChildren$ } from '@pdtec/ngx-observable-lifecycle';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('viewChildren operator', () => {
@@ -118,7 +118,7 @@ class TestSubComponent {}
   selector: 'lib-test',
   template: '<lib-test-sub></lib-test-sub>'
 })
-class TestComponent extends AfterViewInit$ {
+class TestComponent extends AfterViewInit$AndOnDestroy$ {
   @ViewChildren(TestSubComponent)
   public children: QueryList<TestSubComponent> | undefined;
 }
