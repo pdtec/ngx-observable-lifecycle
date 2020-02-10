@@ -7,18 +7,25 @@ export interface IAfterContentChecked$ extends AfterContentChecked {
 }
 
 export class AfterContentChecked$ extends OnDestroy$ implements IAfterContentChecked$ {
-  private ngAfterContentChecked$_ = new ReplaySubject<void>(1);
+  // just for type safety
+  private ngAfterContentCheckedSubject_!: ReplaySubject<void>;
+
+  // initialize field in getter instead of constructor to be mixin friendly
+  // getter is a property of the prototype and get's copied
+  private get ngAfterContentCheckedSubject() {
+    if (this.ngAfterContentCheckedSubject_ === undefined) {
+      this.ngAfterContentCheckedSubject_ = new ReplaySubject<void>(1);
+      this.ngOnDestroy$.subscribe(() => this.ngAfterContentCheckedSubject_.complete());
+    }
+
+    return this.ngAfterContentCheckedSubject_;
+  }
 
   get ngAfterContentChecked$() {
-    return this.ngAfterContentChecked$_.asObservable();
+    return this.ngAfterContentCheckedSubject.asObservable();
   }
 
   ngAfterContentChecked(): void {
-    this.ngAfterContentChecked$_.next();
-  }
-
-  ngOnDestroy(): void {
-    this.ngAfterContentChecked$_.complete();
-    super.ngOnDestroy();
+    this.ngAfterContentCheckedSubject.next();
   }
 }

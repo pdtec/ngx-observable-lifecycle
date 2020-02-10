@@ -7,18 +7,25 @@ export interface IAfterViewChecked$ extends AfterViewChecked {
 }
 
 export class AfterViewChecked$ extends OnDestroy$ implements IAfterViewChecked$ {
-  private ngAfterViewChecked$_ = new ReplaySubject<void>(1);
+  // just for type safety
+  private ngAfterViewCheckedSubject_!: ReplaySubject<void>;
+
+  // initialize field in getter instead of constructor to be mixin friendly
+  // getter is a property of the prototype and get's copied
+  private get ngAfterViewCheckedSubject() {
+    if (this.ngAfterViewCheckedSubject_ === undefined) {
+      this.ngAfterViewCheckedSubject_ = new ReplaySubject<void>(1);
+      this.ngOnDestroy$.subscribe(() => this.ngAfterViewCheckedSubject_.complete());
+    }
+
+    return this.ngAfterViewCheckedSubject_;
+  }
 
   get ngAfterViewChecked$() {
-    return this.ngAfterViewChecked$_.asObservable();
+    return this.ngAfterViewCheckedSubject.asObservable();
   }
 
   ngAfterViewChecked(): void {
-    this.ngAfterViewChecked$_.next();
-  }
-
-  ngOnDestroy(): void {
-    this.ngAfterViewChecked$_.complete();
-    super.ngOnDestroy();
+    this.ngAfterViewCheckedSubject.next();
   }
 }

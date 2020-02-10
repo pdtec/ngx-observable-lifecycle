@@ -7,18 +7,25 @@ export interface IDoCheck$ extends DoCheck {
 }
 
 export class DoCheck$ extends OnDestroy$ implements IDoCheck$ {
-  private ngOnCheck$_ = new ReplaySubject<void>(1);
+  // just for type safety
+  private ngDoCheckSubject_!: ReplaySubject<void>;
+
+  // initialize field in getter instead of constructor to be mixin friendly
+  // getter is a property of the prototype and get's copied
+  private get ngDoCheckSubject() {
+    if (this.ngDoCheckSubject_ === undefined) {
+      this.ngDoCheckSubject_ = new ReplaySubject<void>(1);
+      this.ngOnDestroy$.subscribe(() => this.ngDoCheckSubject_.complete());
+    }
+
+    return this.ngDoCheckSubject_;
+  }
 
   get ngDoCheck$() {
-    return this.ngOnCheck$_.asObservable();
+    return this.ngDoCheckSubject.asObservable();
   }
 
   ngDoCheck(): void {
-    this.ngOnCheck$_.next();
-  }
-
-  ngOnDestroy(): void {
-    this.ngOnCheck$_.complete();
-    super.ngOnDestroy();
+    this.ngDoCheckSubject.next();
   }
 }

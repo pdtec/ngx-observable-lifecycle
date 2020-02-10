@@ -6,14 +6,25 @@ export interface IOnDestroy$ extends OnDestroy {
 }
 
 export class OnDestroy$ implements IOnDestroy$ {
-  private ngOnDestroy$_ = new ReplaySubject<void>(1);
+  // just for type safety
+  private ngOnDestroySubject_!: ReplaySubject<void>;
+
+  // initialize field in getter instead of constructor to be mixin friendly
+  // getter is a property of the prototype and get's copied
+  private get ngOnDestroySubject() {
+    if (this.ngOnDestroySubject_ === undefined) {
+      this.ngOnDestroySubject_ = new ReplaySubject<void>(1);
+    }
+
+    return this.ngOnDestroySubject_;
+  }
 
   get ngOnDestroy$() {
-    return this.ngOnDestroy$_.asObservable();
+    return this.ngOnDestroySubject.asObservable();
   }
 
   ngOnDestroy(): void {
-    this.ngOnDestroy$_.next();
-    this.ngOnDestroy$_.complete();
+    this.ngOnDestroySubject.next();
+    this.ngOnDestroySubject.complete();
   }
 }

@@ -18,18 +18,25 @@ export interface IOnChanges$ extends OnChanges {
 }
 
 export class OnChanges$ extends OnDestroy$ implements IOnChanges$ {
-  private ngOnChanges$_ = new ReplaySubject<TypedChanges<this>>(1);
+  // just for type safety
+  private ngOnChangesSubject_!: ReplaySubject<TypedChanges<this>>;
+
+  // initialize field in getter instead of constructor to be mixin friendly
+  // getter is a property of the prototype and get's copied
+  get ngOnChangesSubject() {
+    if (this.ngOnChangesSubject_ === undefined) {
+      this.ngOnChangesSubject_ = new ReplaySubject<TypedChanges<this>>(1);
+      this.ngOnDestroy$.subscribe(() => this.ngOnChangesSubject_.complete());
+    }
+
+    return this.ngOnChangesSubject_;
+  }
 
   get ngOnChanges$() {
-    return this.ngOnChanges$_.asObservable();
+    return this.ngOnChangesSubject.asObservable();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.ngOnChanges$_.next(changes as any);
-  }
-
-  ngOnDestroy(): void {
-    this.ngOnChanges$_.complete();
-    super.ngOnDestroy();
+    this.ngOnChangesSubject.next(changes as any);
   }
 }

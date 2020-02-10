@@ -1,20 +1,30 @@
 import { AfterContentInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { OnDestroy$ } from './on-destroy';
 
 export interface IAfterContentInit$ extends AfterContentInit {
   readonly ngAfterContentInit$: Observable<void>;
 }
 
-export class AfterContentInit$ extends OnDestroy$ implements IAfterContentInit$ {
-  private ngAfterContentInit$_ = new ReplaySubject<void>(1);
+export class AfterContentInit$ implements IAfterContentInit$ {
+  // just for type safety
+  private ngAfterContentInitSubject_!: ReplaySubject<void>;
+
+  // initialize field in getter instead of constructor to be mixin friendly
+  // getter is a property of the prototype and get's copied
+  private get ngAfterContentInitSubject() {
+    if (this.ngAfterContentInitSubject_ === undefined) {
+      this.ngAfterContentInitSubject_ = new ReplaySubject<void>(1);
+    }
+
+    return this.ngAfterContentInitSubject_;
+  }
 
   get ngAfterContentInit$() {
-    return this.ngAfterContentInit$_.asObservable();
+    return this.ngAfterContentInitSubject.asObservable();
   }
 
   ngAfterContentInit(): void {
-    this.ngAfterContentInit$_.next();
-    this.ngAfterContentInit$_.complete();
+    this.ngAfterContentInitSubject.next();
+    this.ngAfterContentInitSubject.complete();
   }
 }
