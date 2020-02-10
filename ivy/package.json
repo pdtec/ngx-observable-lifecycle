@@ -1,6 +1,6 @@
 {
   "name": "@pdtec/ngx-observable-lifecycle",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "license": "MIT",
   "author": "PDTec AG",
   "contributors": [
@@ -22,7 +22,7 @@
     "demo-code:start": "ng build --project=lib-demo-code --prod --watch",
     "test-code:build": "ng build --project=lib-test-code --prod",
     "test-code:start": "ng build --project=lib-test-code --prod --watch",
-    "bump": "bump --commit \"bump version to v\" --no-verify ivy/projects/lib/package.json ivy/package.json ivy/package-lock.json"
+    "bump": "bump --commit \"bump version to v\" --no-verify projects/lib/package.json package.json package-lock.json"
   },
   "dependencies": {
     "@angular/animations": "~9.0.0",
