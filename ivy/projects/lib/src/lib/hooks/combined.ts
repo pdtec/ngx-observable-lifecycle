@@ -8,14 +8,39 @@ import { IOnChanges$, OnChanges$ } from './on-changes';
 import { IOnInit$, OnInit$ } from './on-init';
 import { applyMixins } from '../mixin';
 
-export class AllHooks {}
+export class AllHooks$ extends OnChanges$ {
+  constructor() {
+    super();
 
+    // mixing in OnChanges does not work at the moment. angular does not detect the method and therefore does not call it.
+    // we need this ugly workaround: directly inherit from OnChanges$, define property on instance and call super
+    this.ngOnChanges = (changes) => {
+      super.ngOnChanges(changes);
+    };
+  }
+}
 export interface AllHooks$ extends IAfterContentChecked$, IAfterContentInit$, IAfterViewChecked$, IAfterViewInit$, IDoCheck$, IOnChanges$, IOnDestroy$, IOnInit$ {}
 
-applyMixins(AllHooks, [AfterContentChecked$, AfterContentInit$, AfterViewChecked$, AfterViewInit$, DoCheck$, OnChanges$, OnDestroy$, OnInit$]);
+applyMixins(AllHooks$, [AfterContentChecked$, AfterContentInit$, AfterViewChecked$, AfterViewInit$, DoCheck$, OnDestroy$, OnInit$]);
 
 
-export class AfterViewInit$WithOnChanges$WithOnDestroy$ implements IAfterViewInit$, IOnChanges$, IOnDestroy$ {}
-export interface AfterViewInit$WithOnChanges$WithOnDestroy$ extends IAfterViewInit$, IOnChanges$, IOnDestroy$ {}
+export class BaseHooks$ extends OnChanges$ {
+  constructor() {
+    super();
 
-applyMixins(AfterViewInit$WithOnChanges$WithOnDestroy$, [AfterViewInit$, OnChanges$, OnDestroy$]);
+    // mixing in OnChanges does not work at the moment. angular does not detect the method and therefore does not call it.
+    // we need this ugly workaround: directly inherit from OnChanges$, define property on instance and call super
+    this.ngOnChanges = (changes) => {
+      super.ngOnChanges(changes);
+    };
+  }
+}
+export interface BaseHooks$ extends IOnInit$, IAfterViewInit$, IOnChanges$, IOnDestroy$ {}
+
+applyMixins(BaseHooks$, [OnInit$, AfterViewInit$, OnDestroy$]);
+
+
+export class AfterViewInit$AndOnDestroy$ {}
+export interface AfterViewInit$AndOnDestroy$ extends IAfterViewInit$, IOnDestroy$ {}
+
+applyMixins(AfterViewInit$AndOnDestroy$, [AfterViewInit$, OnDestroy$]);

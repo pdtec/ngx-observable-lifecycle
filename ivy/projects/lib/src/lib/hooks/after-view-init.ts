@@ -1,13 +1,11 @@
 import { AfterViewInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { OnDestroy$ } from './on-destroy';
 
 export interface IAfterViewInit$ extends AfterViewInit {
   readonly ngAfterViewInit$: Observable<void>;
 }
 
-// TODO: remove OnDestroy$ when mixins are ready
-export class AfterViewInit$ extends OnDestroy$ implements IAfterViewInit$ {
+export class AfterViewInit$ implements IAfterViewInit$ {
   // just for type safety
   private ngAfterViewInitSubject_!: ReplaySubject<void>;
 
