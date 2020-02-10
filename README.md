@@ -2,7 +2,7 @@
 
 Library to wrap Angular lifecycle hooks in RxJS Observables.
 
-* Works with AOT
+* Works with ViewEngine's AOT and JIT
 * Works with Angular 9 & Ivy
 * Tree-Shakeable
 
@@ -15,32 +15,30 @@ or ```yarn add @pdtec/ngx-observable-lifecycle```
 
 ## API
 
-The library provides base classes as well as class mixins.
-
-You need mixins only in two conditions.
-If none of these is true (most of the time), keep it simple and skip mixins for now.
-
-* if you want to use more than one lifecycle-hook-observable at the same time
-* if your component class already has a base class
-
-For a general introduction to mixins please read [Mixins on TypeScript Deep Dive](https://basarat.gitbooks.io/typescript/docs/types/mixins.html).
-
-For each [Angular lifecycle hook](https://angular.io/guide/lifecycle-hooks) there is one mixin and one base class.
-E.g. mixin ```WithOnDestroy$``` and class ```OnDestroy$``` implement ```OnDestroy``` with its method ```ngOnDestroy```.
-They provide an observable ```ngOnDestroy$``` which emits an event when ```ngOnDestroy``` get called.
+For each [Angular lifecycle hook](https://angular.io/guide/lifecycle-hooks) there is a class that implements the hook
+and provides an observable.
+E.g. Class ```OnDestroy$``` implements ```OnDestroy``` with its method ```ngOnDestroy``` and
+provides an observable ```ngOnDestroy$``` which emits when ```ngOnDestroy``` get called.
 
 Same applies for all the other lifecycle hooks:
 ```OnInit```, ```OnChanges```, ```DoCheck```, ```AfterViewChecked```, ```AfterViewInit```,
 ```AfterContentChecked``` and ```AfterContentInit```.
 
-In addition the library provides some RxJS operators like
+In addition the library provides some helpers like:
  
-* ```takeUntilDestroyed``` to automatically unsubscribe
-* ```onInput``` to filter and map generic events from ngOnChanges$ down to a single input
+* function ```input$``` to observe a property decorated with @Input
+* function ```viewChildren$``` to observe a property decorated with @ViewChildren and of type QueryList
+* RxJS operator ```takeUntilDestroyed``` to automatically unsubscribe
 
-## Basic Usage
+## Limitations
 
-In your component or service class extend one of the base classes.
+Currently there is no way to use [TypeScript Mixins](https://basarat.gitbooks.io/typescript/docs/types/mixins.html).
+We tried it in version 1 of this library but it doesn't work with ViewEngine.
+So we are not able to handle "multi-inheritance" and therefore this library won't work if your component already has a base class.
+
+## Usage
+
+In your component or service class extend one of the provided base classes.
 You're then able to use the provided observable to get notified about lifecycle hook calls.
 If your class has a constructor, you have to explicitly call the super constructor.
 
@@ -76,7 +74,7 @@ export class ChildComponent extends OnDestroy$ {
   public value: number | undefined;
 
   constructor(service: Service) {
-    super(); // constructor -> super call
+    super(); // we have a constructor and extend a base class -> we have to call super
 
     service.value$
       .pipe(untilDestroyed(this)) // unsubscribe on destroy
@@ -100,87 +98,41 @@ export class ChildComponent extends OnChanges$ {
   constructor() {
     super();
 
-    this.ngOnChanges$
-      .pipe(
-        onInput('value'), // type safe reference to property
-        map(change => change.currentValue)
-      )
+    input$(this, 'value')
       .subscribe(x => console.log('new value of input', x));
   }
 }
 ```
 
-## Using Mixins
-
-### Existing Base Class
-
-Same example as above but now the component already extends a base class.
-Because ECMAScript / TypeScript does not support multiple inheritance we can not use ```OnDestroy$``` directly.
-
-But we can use the ```WithOnDestroy$``` mixin instead and wrap the existing base class.
+### Observe View Children
 
 ```ts
-class BaseClass {
-  aMethod() {}
-}
-
-const BaseClassWithOnDestroy$ = WithOnDestroy$(BaseClass);
-
 @Component({
   selector: 'app-child',
-  template: '<div>Value: {{value}}</div>',
+  template: '<app-grand-child></app-grand-child',
 })
-export class ChildComponent extends BaseClassWithOnDestroy$ {
-  public value: number | undefined;
-
-  constructor(service: ObservableService) {
+export class ChildComponent extends AfterViewInit$AndOnDestroy$ {
+  
+  @ViewChildren()
+  public children: QueryList<GrandChildComponent>;
+  
+  constructor() {
     super();
 
-    this.aMethod(); // method from base class available
-    this.ngOnDestroy$; // lifecycle observable available
+    viewChildren$(this, 'children')
+      .subscribe(x => console.log(`I have ${x.length} children`));
   }
 }
 ```
 
-### Multiple Lifecycle Hooks
+## Multiple Lifecycle Hooks
 
-With the provided mixins you can create a custom combination of lifecycle-hook-observables.
-Just pass the result of one mixin call to another mixin like you would do with a regular base class (example above).
+As already mentioned in section limitations, currently it is not possible to use mixins.
+Therefore we can not combine multiple base classes dynamically as we need them.
 
-```ts
-const OnDestroy$OnChanges$ = WithOnDestroy$(WithAfterViewChecked$());
+The library provides some combinations: ```AllHooks$```, ```BaseHooks$``` and ```AfterViewInit$AndOnDestroy$```.
+```BaseHooks$``` includes ```OnInit$```, ```AfterViewInit$```, ```OnChanges$``` and ```OnDestroy$```.
 
-@Component({
-  selector: 'app-child',
-  template: '<div>Value: {{value}}</div>',
-})
-export class ChildComponent extends OnDestroy$OnChanges$ {
-  public value: number | undefined;
+## License
 
-  constructor(service: ObservableService) {
-    super();
-
-    this.ngOnDestroy$;
-    this.ngAfterViewChecked$;
-  }
-}
-```
-
-The first mixin call also accepts an optional base class as seen in the example above.
-So you can use all together: base class and multiple lifecycle hooks.
-
-## Known Bugs / Limitations
-
-### WithOnChanges$ and Inheritance
-
-Currently Angular does not treat ngOnChanges in the same way as all the other hooks.
-Angular simply does not call library's generic ngOnChanges method.
-It only works if
-
-* the component class implements ```ngOnChanges``` itself and calls ```super.ngOnChanges()```
-* a base class passed to ```WithOnChanges$``` implements ```ngOnChanges```
-
-As a workaround we implemented a dummy base class that implements ```ngOnChanges``` and use it within ```WithOnChanges$``` all the time.
-
-This approach has the disadvantage that you can not pass a base class to ```WithOnChanges$```.
-So basically ```WithOnChanges$``` does not support inheritance at the moment.
+MIT, please see file *LICENSE* for details.
