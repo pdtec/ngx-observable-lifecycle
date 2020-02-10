@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { input$, OnChanges$, takeUntilDestroyed } from '@pdtec/ngx-observable-lifecycle';
-
+import { input$, OnChanges$ } from '@pdtec/ngx-observable-lifecycle';
 
 @Component({
   selector: 'app-on-changes',
@@ -8,7 +7,6 @@ import { input$, OnChanges$, takeUntilDestroyed } from '@pdtec/ngx-observable-li
 })
 export class OnChangesComponent extends OnChanges$ {
   @Input()
-  // public value: number = 5;
   public value: number | undefined = 5;
 
   public valueFromObservable: number | undefined;
@@ -16,18 +14,9 @@ export class OnChangesComponent extends OnChanges$ {
   constructor() {
     super();
 
-    this.ngOnChanges$
-      .pipe(
-        takeUntilDestroyed(this),
-      )
-      .subscribe(change => {
-        console.log('ngOnChanges$ triggered');
-      });
-
     input$(this, 'value')
       .subscribe(value => {
         this.valueFromObservable = value;
-        console.log('value changed');
       });
   }
 }

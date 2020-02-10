@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { OnDestroy$, takeUntilDestroyed } from '@pdtec/ngx-observable-lifecycle';
+import { Component, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit$, takeUntilDestroyed, viewChildren$ } from '@pdtec/ngx-observable-lifecycle';
 import { ObservableService } from './observable.service';
+import { OnChangesComponent } from './on-changes.component';
 
 @Component({
   selector: 'app-child-2',
@@ -9,7 +10,11 @@ import { ObservableService } from './observable.service';
     <app-on-changes [value]="value"></app-on-changes>
   `,
 })
-export class Child2Component extends OnDestroy$ {
+export class Child2Component extends AfterViewInit$ {
+
+  @ViewChildren(OnChangesComponent)
+  public children: QueryList<OnChangesComponent> | undefined | any;
+
   public value: number | undefined;
 
   constructor(service: ObservableService) {
@@ -18,5 +23,8 @@ export class Child2Component extends OnDestroy$ {
     service.value$
       .pipe(takeUntilDestroyed(this))
       .subscribe(x => this.value = x);
+
+    viewChildren$(this, 'children')
+      .subscribe(x => console.log('view children updated:', x));
   }
 }
