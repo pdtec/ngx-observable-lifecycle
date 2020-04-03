@@ -14,4 +14,4 @@ export * from './lib/hooks/combined';
 
 export { takeUntilDestroyed } from './lib/operators/take-until-destroyed';
 export { onlyChangesOf, onlyCurrentValueOf, input$ } from './lib/operators/only-changes-of';
-export { viewChildren$ } from './lib/operators/view-children';
+export { viewChildren, viewChildren$ } from './lib/operators/view-children';
