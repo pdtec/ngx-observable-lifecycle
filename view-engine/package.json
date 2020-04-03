@@ -2,7 +2,7 @@
   "name": "view-engine",
   "version": "0.0.0",
   "scripts": {
-    "lib:start": "cpx ../ivy/dist/** dist/ --watch --verbose",
+    "lib:start": "cpx \"../ivy/dist/**\" dist --watch --verbose",
     "demo:start": "ng serve --aot=true",
     "demo:test": "ng test"
   },
