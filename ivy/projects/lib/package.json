@@ -12,9 +12,11 @@
       "name": "Philipp Burgmer"
     }
   ],
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
     "@angular/core": ">= 8.0.0",
-    "rxjs": ">= 6.0.0",
-    "tslib": "^1.10.0"
+    "rxjs": ">= 6.0.0"
   }
 }

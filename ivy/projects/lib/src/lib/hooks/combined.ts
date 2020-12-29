@@ -8,7 +8,9 @@ import { IOnChanges$, OnChanges$ } from './on-changes';
 import { IOnInit$, OnInit$ } from './on-init';
 import { applyMixins } from '../mixin';
 import { ObjectWithQueryList, viewChildren$ } from '../operators/view-children';
+import { Directive } from '@angular/core';
 
+@Directive()
 export class AllHooks$ extends OnChanges$ {
   constructor() {
     super();
@@ -35,6 +37,7 @@ export interface AfterViewInit$AndOnDestroy$ extends IAfterViewInit$, IOnDestroy
 applyMixins(AfterViewInit$AndOnDestroy$, [AfterViewInit$, OnDestroy$]);
 
 
+@Directive()
 export class BaseHooks$ extends OnChanges$ {
   constructor() {
     super();

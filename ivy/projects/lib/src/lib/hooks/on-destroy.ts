@@ -5,6 +5,7 @@ export interface IOnDestroy$ extends OnDestroy {
   readonly ngOnDestroy$: Observable<void>;
 }
 
+// TODO: Add Angular decorator.
 export class OnDestroy$ implements IOnDestroy$ {
   // just for type safety
   private ngOnDestroySubject_!: ReplaySubject<void>;
