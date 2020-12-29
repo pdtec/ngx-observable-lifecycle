@@ -15,7 +15,4 @@ import './lib/hooks/on-init.spec';
 import './lib/operators/only-changes-of.spec';
 import './lib/operators/view-children.spec';
 
-import './lib/functions/complete-on-destroy.spec';
-import './lib/functions/mark-for-check.spec';
-
 export function runTests() {}
