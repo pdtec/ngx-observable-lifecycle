@@ -77,7 +77,7 @@ export class ChildComponent extends OnDestroy$ {
     super(); // we have a constructor and extend a base class -> we have to call super
 
     service.value$
-      .pipe(untilDestroyed(this)) // unsubscribe on destroy
+      .pipe(takeUntilDestroyed(this)) // unsubscribe on destroy
       .subscribe(x => this.value = x);
   }
 }
