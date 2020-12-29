@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChildren } from '@angular/core';
-import { AfterViewInit$, takeUntilDestroyed, viewChildren$ } from '@pdtec/ngx-observable-lifecycle';
+import { BaseHooks$, takeUntilDestroyed, viewChildren$ } from '@pdtec/ngx-observable-lifecycle';
 import { ObservableService } from './observable.service';
 import { OnChangesComponent } from './on-changes.component';
 
@@ -7,10 +7,10 @@ import { OnChangesComponent } from './on-changes.component';
   selector: 'app-child-2',
   template: `
     <div>Child 2 Value: {{value}}</div>
-    <app-on-changes [value]="value"></app-on-changes>
+    <app-on-changes [value1]="value" [value2]="value"></app-on-changes>
   `,
 })
-export class Child2Component extends AfterViewInit$ {
+export class Child2Component extends BaseHooks$ {
 
   @ViewChildren(OnChangesComponent)
   public children: QueryList<OnChangesComponent> | undefined | any;
@@ -25,6 +25,9 @@ export class Child2Component extends AfterViewInit$ {
       .subscribe(x => this.value = x);
 
     viewChildren$(this, 'children')
+      .subscribe(x => console.log('view children updated:', x));
+
+    this.viewChildren$('children')
       .subscribe(x => console.log('view children updated:', x));
   }
 }

@@ -6,13 +6,13 @@ import { takeUntilDestroyed } from './take-until-destroyed';
 import { IOnDestroy$ } from '../hooks/on-destroy';
 
 // get the generic parameter of query list
-type QueryListOf<T extends QueryList<any> | undefined> = T extends QueryList<infer P> ? P : never;
+export type QueryListOf<T extends QueryList<any> | undefined> = T extends QueryList<infer P> ? P : never;
 
 // type of P in T has to be a QueryList or undefined, every other property doesn't matter
-type ObjectWithQueryList<T, P extends keyof T> = { [X in P]: QueryList<any> | undefined };
+export type ObjectWithQueryList<T, P extends keyof T> = { [X in P]: QueryList<any> | undefined };
 
 /**
- * TODO
+ * TODO: add documentation
  */
 export function viewChildren<
     T extends ObjectWithQueryList<T, P>, // Object with QueryList
@@ -40,11 +40,14 @@ export function viewChildren<
   };
 }
 
+/**
+ * TODO: add documentation
+ */
 export function viewChildren$<
     T extends ObjectWithQueryList<T, P> & IAfterViewInit$ & IOnDestroy$, // Object with QueryList
     P extends keyof T, // Property containing QueryList
     C extends QueryListOf<T[P]>, // generic parameter of QueryList
-  >(that: T, property: P): Observable<C[]> {
+  >(that: T, property: P): Observable<readonly C[]> {
   const subject = new ReplaySubject<void>(1);
 
   console.log(`viewChildren$#viewChildren$`);
@@ -60,9 +63,9 @@ export function viewChildren$<
   });
 
   return subject.pipe(
-    tap(x => console.log(`viewChildren$ before viewChildren`, x) ),
+    // tap(x => console.log(`viewChildren$ before viewChildren`, x) ),
     viewChildren(that, property),
-    tap(x => console.log(`viewChildren$ after viewChildren`, x) ),
+    // tap(x => console.log(`viewChildren$ after viewChildren`, x) ),
     takeUntilDestroyed(that)
   );
 }

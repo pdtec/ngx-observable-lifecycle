@@ -89,3 +89,83 @@ export function input$<T extends IOnChanges$, P extends keyof T>(that: T, proper
     onlyCurrentValueOf(property)
   );
 }
+
+/**
+ * Observes the given property for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: T[X]}>;
+
+/**
+ * Observes the given properties for changes (via OnChanges hook).
+ * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
+ */
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: T[X]}>;
+
+// Using var-args parameter breaks refactoring support. Renaming properties will not change the property passed to this function.
+// I don't think we need more than 9 parameters, so we comment out this option.
+// export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}>;
+
+export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}> {
+  return inputs$Impl(that, ...properties);
+}
+
+export function inputs$Impl<T, P extends keyof T>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}> {
+  return that.ngOnChanges$.pipe(
+    filter(changes => {
+      const change = properties.find(x => changes[x] !== undefined);
+
+      return change !== undefined;
+    }),
+    map(() => {
+      const result = properties.reduce((acc, cur) => {
+        acc[cur] = that[cur];
+        return acc;
+      }, {} as any);
+
+      return result;
+    }),
+  );
+}

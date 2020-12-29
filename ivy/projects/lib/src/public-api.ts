@@ -10,8 +10,8 @@ export { DoCheck$ } from './lib/hooks/do-check';
 export { OnChanges$, TypedChanges, TypedChange } from './lib/hooks/on-changes';
 export { OnDestroy$ } from './lib/hooks/on-destroy';
 export { OnInit$ } from './lib/hooks/on-init';
-export * from './lib/hooks/combined';
+export { BaseHooks$, AfterViewInit$AndOnDestroy$, AllHooks$ } from './lib/hooks/combined';
 
 export { takeUntilDestroyed } from './lib/operators/take-until-destroyed';
-export { onlyChangesOf, onlyCurrentValueOf, input$ } from './lib/operators/only-changes-of';
-export { viewChildren$ } from './lib/operators/view-children';
+export { onlyChangesOf, onlyCurrentValueOf, input$, inputs$ } from './lib/operators/only-changes-of';
+export { viewChildren, viewChildren$ } from './lib/operators/view-children';

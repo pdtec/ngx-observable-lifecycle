@@ -98,8 +98,42 @@ export class ChildComponent extends OnChanges$ {
   constructor() {
     super();
 
-    input$(this, 'value')
+    input$(this as ChildComponent, 'value')
       .subscribe(x => console.log('new value of input', x));
+    
+    // or
+      
+    this.input$('value')
+      .subscribe(x => console.log('new value of input', x));
+  }
+}
+```
+
+### Observe Changes of Multiple Inputs
+
+```ts
+@Component({
+  selector: 'app-child',
+  template: '<div>Value: {{value}}</div>',
+})
+export class ChildComponent extends OnChanges$ {
+  
+  @Input()
+  public value1: number | undefined;
+
+  @Input()
+  public value2: number | undefined;
+  
+  constructor() {
+    super();
+
+    inputs$(this as ChildComponent, 'value1', 'value2')
+      .subscribe(x => console.log('new value1 and/or value2', x));
+    
+    // or
+      
+    this.inputs$('value1', 'value2')
+      .subscribe(x => console.log('new value1 and/or value2', x));
   }
 }
 ```
@@ -120,6 +154,11 @@ export class ChildComponent extends AfterViewInit$AndOnDestroy$ {
     super();
 
     viewChildren$(this, 'children')
+      .subscribe(x => console.log(`I have ${x.length} children`));
+    
+    // or
+      
+    this.viewChildren$('children')
       .subscribe(x => console.log(`I have ${x.length} children`));
   }
 }

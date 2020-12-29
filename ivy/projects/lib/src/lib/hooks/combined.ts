@@ -7,6 +7,7 @@ import { DoCheck$, IDoCheck$ } from './do-check';
 import { IOnChanges$, OnChanges$ } from './on-changes';
 import { IOnInit$, OnInit$ } from './on-init';
 import { applyMixins } from '../mixin';
+import { ObjectWithQueryList, viewChildren$ } from '../operators/view-children';
 
 export class AllHooks$ extends OnChanges$ {
   constructor() {
@@ -24,6 +25,16 @@ export interface AllHooks$ extends IAfterContentChecked$, IAfterContentInit$, IA
 applyMixins(AllHooks$, [AfterContentChecked$, AfterContentInit$, AfterViewChecked$, AfterViewInit$, DoCheck$, OnDestroy$, OnInit$]);
 
 
+export class AfterViewInit$AndOnDestroy$ {
+  public viewChildren$<T extends ObjectWithQueryList<T, P> & IAfterViewInit$ & IOnDestroy$ , P extends keyof T>(this: T, property: P) {
+    return viewChildren$(this, property);
+  }
+}
+export interface AfterViewInit$AndOnDestroy$ extends IAfterViewInit$, IOnDestroy$ {}
+
+applyMixins(AfterViewInit$AndOnDestroy$, [AfterViewInit$, OnDestroy$]);
+
+
 export class BaseHooks$ extends OnChanges$ {
   constructor() {
     super();
@@ -37,10 +48,4 @@ export class BaseHooks$ extends OnChanges$ {
 }
 export interface BaseHooks$ extends IOnInit$, IAfterViewInit$, IOnChanges$, IOnDestroy$ {}
 
-applyMixins(BaseHooks$, [OnInit$, AfterViewInit$, OnDestroy$]);
-
-
-export class AfterViewInit$AndOnDestroy$ {}
-export interface AfterViewInit$AndOnDestroy$ extends IAfterViewInit$, IOnDestroy$ {}
-
-applyMixins(AfterViewInit$AndOnDestroy$, [AfterViewInit$, OnDestroy$]);
+applyMixins(BaseHooks$, [OnInit$, AfterViewInit$AndOnDestroy$]);

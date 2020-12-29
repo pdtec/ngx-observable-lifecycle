@@ -28,9 +28,11 @@ describe('BaseHooks$ observables', () => {
     expect(fixture.componentInstance.ngAfterViewInit$triggered).toBe(1);
     expect(fixture.componentInstance.ngOnChanges$triggered).toBe(1);
 
+    fixture.detectChanges();
+    expect(fixture.componentInstance.ngOnChanges$triggered).toBe(1);
+
     fixture.destroy();
 
-    fixture.detectChanges();
     await fixture.whenStable();
 
     expect(fixture.componentInstance.ngOnDestroy$triggered).toBe(1);

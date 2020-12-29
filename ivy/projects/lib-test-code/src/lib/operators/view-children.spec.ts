@@ -44,7 +44,7 @@ describe('viewChildren$ function', () => {
       const queryList = new QueryList<TestSubComponent>();
       component.children = queryList;
 
-      let lastViewChildren: TestSubComponent[] | undefined = undefined as any;
+      let lastViewChildren: readonly TestSubComponent[] | undefined = undefined as any;
 
       viewChildren$(component, 'children')
         .subscribe(x => lastViewChildren = x);
@@ -79,7 +79,7 @@ describe('viewChildren$ function', () => {
     });
 
     it('should provide value changes for requested property', async () => {
-      let lastViewChildren: TestSubComponent[] | undefined = undefined as any;
+      let lastViewChildren: readonly TestSubComponent[] | undefined = undefined as any;
 
       viewChildren$(fixture.componentInstance, 'children')
         .subscribe(x => lastViewChildren = x);
