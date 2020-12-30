@@ -2,7 +2,7 @@
 
 ## 2.1.0
 
-* fix return type of viewChildren$, now returning ```Observable<ReadonlyArray<T>>``` instead of ```Observable<Array<T>```
+* fix return type of viewChildren$, now returning ```Observable<ReadonlyArray<T>>``` instead of ```Observable<Array<T>>```
 * add function ```inputs$``` to observe multiple inputs but only receive on event if multiple of them change during one change detection lifecycle
 * add methods ```input$``` and ```inputs``` to ```OnChanges$```, see readme for usage example
 * add method ```viewChildren$```, see readme for usage example
