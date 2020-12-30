@@ -1,6 +1,6 @@
 {
   "name": "@pdtec/ngx-observable-lifecycle",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
   "author": "PDTec AG",
   "contributors": [
@@ -19,6 +19,8 @@
     "lib:build": "run-s lib:build:ng lib:build:readme",
     "lib:build:ng": "ng build --project=lib --prod",
     "lib:build:readme": "cpx ../readme.md dist/lib/",
+    "lib:publish:dist": "npm publish dist/lib",
+    "lib:publish": "run-s lib:build lib:publish:dist",
     "demo-code:build": "ng build --project=lib-demo-code --prod",
     "demo-code:start": "ng build --project=lib-demo-code --prod --watch",
     "test-code:build": "ng build --project=lib-test-code --prod",
