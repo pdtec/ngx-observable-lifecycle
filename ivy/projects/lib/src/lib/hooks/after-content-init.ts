@@ -1,10 +1,11 @@
-import { AfterContentInit } from '@angular/core';
+import { AfterContentInit, Directive } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 export interface IAfterContentInit$ extends AfterContentInit {
   readonly ngAfterContentInit$: Observable<void>;
 }
 
+@Directive()
 export class AfterContentInit$ implements IAfterContentInit$ {
   // just for type safety
   private ngAfterContentInitSubject_!: ReplaySubject<void>;

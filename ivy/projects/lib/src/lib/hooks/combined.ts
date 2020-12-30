@@ -7,8 +7,10 @@ import { DoCheck$, IDoCheck$ } from './do-check';
 import { IOnChanges$, OnChanges$ } from './on-changes';
 import { IOnInit$, OnInit$ } from './on-init';
 import { applyMixins } from '../mixin';
-import { ObjectWithQueryList, viewChildren$ } from '../operators/view-children';
+import { Directive } from '@angular/core';
+import { WithViewChildren$ } from '../mixins/with-view-children';
 
+@Directive()
 export class AllHooks$ extends OnChanges$ {
   constructor() {
     super();
@@ -20,21 +22,13 @@ export class AllHooks$ extends OnChanges$ {
     };
   }
 }
-export interface AllHooks$ extends IAfterContentChecked$, IAfterContentInit$, IAfterViewChecked$, IAfterViewInit$, IDoCheck$, IOnChanges$, IOnDestroy$, IOnInit$ {}
 
-applyMixins(AllHooks$, [AfterContentChecked$, AfterContentInit$, AfterViewChecked$, AfterViewInit$, DoCheck$, OnDestroy$, OnInit$]);
+export interface AllHooks$ extends IAfterContentChecked$, IAfterContentInit$, IAfterViewChecked$, IAfterViewInit$, IDoCheck$, IOnChanges$, IOnDestroy$, IOnInit$, WithViewChildren$ {}
 
-
-export class AfterViewInit$AndOnDestroy$ {
-  public viewChildren$<T extends ObjectWithQueryList<T, P> & IAfterViewInit$ & IOnDestroy$ , P extends keyof T>(this: T, property: P) {
-    return viewChildren$(this, property);
-  }
-}
-export interface AfterViewInit$AndOnDestroy$ extends IAfterViewInit$, IOnDestroy$ {}
-
-applyMixins(AfterViewInit$AndOnDestroy$, [AfterViewInit$, OnDestroy$]);
+applyMixins(AllHooks$, [AfterContentChecked$, AfterContentInit$, AfterViewChecked$, AfterViewInit$, DoCheck$, OnDestroy$, OnInit$, WithViewChildren$]);
 
 
+@Directive()
 export class BaseHooks$ extends OnChanges$ {
   constructor() {
     super();
@@ -46,6 +40,14 @@ export class BaseHooks$ extends OnChanges$ {
     };
   }
 }
-export interface BaseHooks$ extends IOnInit$, IAfterViewInit$, IOnChanges$, IOnDestroy$ {}
 
-applyMixins(BaseHooks$, [OnInit$, AfterViewInit$AndOnDestroy$]);
+export interface BaseHooks$ extends IOnInit$, IAfterViewInit$, IOnChanges$, IOnDestroy$, WithViewChildren$ {}
+
+applyMixins(BaseHooks$, [OnInit$, AfterViewInit$, OnDestroy$, WithViewChildren$]);
+
+
+export class AfterViewInit$AndOnDestroy$ {}
+
+export interface AfterViewInit$AndOnDestroy$ extends IAfterViewInit$, IOnDestroy$, WithViewChildren$ {}
+
+applyMixins(AfterViewInit$AndOnDestroy$, [AfterViewInit$, OnDestroy$, WithViewChildren$]);
