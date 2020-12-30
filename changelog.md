@@ -5,7 +5,11 @@
 * fix return type of viewChildren$, now returning Observable<ReadonlyArray<T>> instead of Observable<Array<T>
 * add function ```inputs$``` to observe multiple inputs but only receive on event if multiple of them change during one change detection lifecycle
 * add methods ```input$``` and ```inputs``` to ```OnChanges$```, see readme for usage example
-* add method ```viewChildren$``` ```OnChanges$```, see readme for usage example
+* add method ```viewChildren$```, see readme for usage example
+
+## 2.0.1
+
+* error in ivy prod build fixed ([#1](https://github.com/pdtec/ngx-observable-lifecycle/issues/1))
 
 ## 2.0.0
 
