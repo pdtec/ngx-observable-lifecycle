@@ -1,5 +1,9 @@
 # ngx-observable-lifecycle Changelog
 
+## 2.1.1
+
+* republish of 2.1.0 to fix publishing error
+
 ## 2.1.0
 
 * fix return type of viewChildren$, now returning ```Observable<ReadonlyArray<T>>``` instead of ```Observable<Array<T>>```
