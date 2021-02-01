@@ -1,4 +1,4 @@
-import { SimpleChanges } from '@angular/core';
+import { Injectable, SimpleChanges } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IAfterContentChecked$ } from './after-content-checked';
 import { IAfterContentInit$ } from './after-content-init';
@@ -11,6 +11,7 @@ import { IOnInit$ } from './on-init';
 import { ObjectWithQueryList, viewChildren$ } from '../operators/view-children';
 import { input$, inputs$Impl } from '../operators/only-changes-of';
 
+@Injectable()
 export class AllHooks$ implements IAfterContentChecked$, IAfterContentInit$, IAfterViewChecked$, IAfterViewInit$, IDoCheck$, IOnChanges$, IOnDestroy$, IOnInit$ {
   // just for type safety
   private ngAfterContentCheckedSubject_!: ReplaySubject<void>;
@@ -263,6 +264,7 @@ export class AllHooks$ implements IAfterContentChecked$, IAfterContentInit$, IAf
   }
 }
 
+@Injectable()
 export class BaseHooks$ implements IOnInit$, IOnChanges$, IAfterViewInit$, IOnDestroy$ {
   // just for type safety
   private ngOnInitSubject_!: ReplaySubject<void>;
@@ -427,6 +429,7 @@ export class BaseHooks$ implements IOnInit$, IOnChanges$, IAfterViewInit$, IOnDe
   }
 }
 
+@Injectable()
 export class AfterViewInit$AndOnDestroy$ implements IAfterViewInit$, IOnDestroy$ {
   // just for type safety
   private ngAfterViewInitSubject_!: ReplaySubject<void>;

@@ -1,4 +1,4 @@
-import { Directive, DoCheck } from '@angular/core';
+import { DoCheck, Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { OnDestroy$ } from './on-destroy';
 
@@ -6,7 +6,7 @@ export interface IDoCheck$ extends DoCheck {
   readonly ngDoCheck$: Observable<void>;
 }
 
-@Directive()
+@Injectable()
 export class DoCheck$ extends OnDestroy$ implements IDoCheck$ {
   // just for type safety
   private ngDoCheckSubject_!: ReplaySubject<void>;
