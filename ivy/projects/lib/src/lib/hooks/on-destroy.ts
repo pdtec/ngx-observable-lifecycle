@@ -1,11 +1,11 @@
-import { OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 export interface IOnDestroy$ extends OnDestroy {
   readonly ngOnDestroy$: Observable<void>;
 }
 
-// TODO: Add Angular decorator.
+@Injectable()
 export class OnDestroy$ implements IOnDestroy$ {
   // just for type safety
   private ngOnDestroySubject_!: ReplaySubject<void>;

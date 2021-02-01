@@ -1,4 +1,4 @@
-import { Directive, OnChanges, SimpleChanges } from '@angular/core';
+import { Injectable, OnChanges, SimpleChanges } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { OnDestroy$ } from './on-destroy';
 import { input$, inputs$Impl } from '../operators/only-changes-of';
@@ -18,7 +18,7 @@ export interface IOnChanges$ extends OnChanges {
   readonly ngOnChanges$: Observable<TypedChanges<this>>;
 }
 
-@Directive()
+@Injectable()
 export class OnChanges$ extends OnDestroy$ implements IOnChanges$ {
   // just for type safety
   private ngOnChangesSubject_!: ReplaySubject<TypedChanges<this>>;

@@ -1,4 +1,4 @@
-import { AfterContentChecked, Directive } from '@angular/core';
+import { AfterContentChecked, Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { OnDestroy$ } from './on-destroy';
 
@@ -6,7 +6,7 @@ export interface IAfterContentChecked$ extends AfterContentChecked {
   readonly ngAfterContentChecked$: Observable<void>;
 }
 
-@Directive()
+@Injectable()
 export class AfterContentChecked$ extends OnDestroy$ implements IAfterContentChecked$ {
   // just for type safety
   private ngAfterContentCheckedSubject_!: ReplaySubject<void>;

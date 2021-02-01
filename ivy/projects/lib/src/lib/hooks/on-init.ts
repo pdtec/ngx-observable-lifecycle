@@ -1,11 +1,11 @@
-import { Directive, OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 export interface IOnInit$ extends OnInit {
   readonly ngOnInit$: Observable<void>;
 }
 
-@Directive()
+@Injectable()
 export class OnInit$ implements IOnInit$ {
   // just for type safety
   private ngOnInitSubject_!: ReplaySubject<void>;
