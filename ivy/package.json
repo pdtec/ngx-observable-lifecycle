@@ -10,7 +10,8 @@
   ],
   "private": true,
   "scripts": {
-    "build": "run-s lib:build demo-code:build test-code:build demo:build",
+    "build": "run-s build:libs demo:build",
+    "build:libs": "run-s lib:build demo-code:build test-code:build ",
     "test": "run-s test-code:build demo:test",
     "demo:start": "ng serve",
     "demo:build": "ng build --project=demo --prod",
