@@ -5,6 +5,7 @@ import { Child2Component } from './child-2.component';
 import { OnChangesComponent } from './on-changes.component';
 import { SubscriberCounterComponent } from './subscriber-counter.component';
 import { CommonModule } from '@angular/common';
+import { UsageComponent, UsageDirective, UsagePipe } from './usage';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,9 @@ import { CommonModule } from '@angular/common';
     Child2Component,
     OnChangesComponent,
     SubscriberCounterComponent,
+    UsageDirective,
+    UsageComponent,
+    UsagePipe,
   ],
   imports: [
     CommonModule,
@@ -23,6 +27,9 @@ import { CommonModule } from '@angular/common';
     Child2Component,
     OnChangesComponent,
     SubscriberCounterComponent,
+    UsageDirective,
+    UsageComponent,
+    UsagePipe,
   ]
 })
 export class LibDemoCodeModule { }
