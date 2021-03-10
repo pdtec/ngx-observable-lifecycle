@@ -1,5 +1,10 @@
 # ngx-observable-lifecycle Changelog
 
+## 3.0.0
+
+* *TypedChanges* and *TypedChange* removed.
+  Mostly used internally but causing compile errors when used in combination with inheritance.
+
 ## 2.1.1
 
 * republish of 2.1.0 to fix publishing error
