@@ -1,17 +1,17 @@
 import { Subject } from 'rxjs';
-import { Component, Input, NgModule, SimpleChange, ViewChild } from '@angular/core';
-import { input$, inputs$, OnChanges$, onlyChangesOf, TypedChange, TypedChanges } from '@pdtec/ngx-observable-lifecycle';
+import { Component, Input, NgModule, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { input$, inputs$, OnChanges$, onlyChangesOf } from '@pdtec/ngx-observable-lifecycle';
 import { TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { tap } from 'rxjs/operators';
 
 describe('onlyChangesOf operator', () => {
   it('should pass value changes for requested property', () => {
-    const subject = new Subject<TypedChanges<TestComponent>>();
-    let lastChange: TypedChange<any> | undefined = undefined as any;
+    const subject = new Subject<SimpleChanges>();
+    let lastChange: SimpleChange | undefined = undefined as any;
 
     subject
-      .pipe(onlyChangesOf('value1'))
+      .pipe(onlyChangesOf<TestComponent>('value1'))
       .subscribe(change => lastChange = change);
 
     expect(lastChange).toBeUndefined();
@@ -26,8 +26,8 @@ describe('onlyChangesOf operator', () => {
   });
 
   it('should filter value changes for other properties', () => {
-    const subject = new Subject<TypedChanges<TestComponent>>();
-    let lastChange: TypedChange<any> | undefined = undefined as any;
+    const subject = new Subject<SimpleChanges>();
+    let lastChange: SimpleChange | undefined = undefined as any;
 
     subject
       .pipe(onlyChangesOf('value1'))

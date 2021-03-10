@@ -7,7 +7,7 @@ export { AfterContentInit$ } from './lib/hooks/after-content-init';
 export { AfterViewChecked$ } from './lib/hooks/after-view-checked';
 export { AfterViewInit$ } from './lib/hooks/after-view-init';
 export { DoCheck$ } from './lib/hooks/do-check';
-export { OnChanges$, TypedChanges, TypedChange } from './lib/hooks/on-changes';
+export { OnChanges$ } from './lib/hooks/on-changes';
 export { OnDestroy$ } from './lib/hooks/on-destroy';
 export { OnInit$ } from './lib/hooks/on-init';
 export { BaseHooks$, AfterViewInit$AndOnDestroy$, AllHooks$ } from './lib/hooks/combined';

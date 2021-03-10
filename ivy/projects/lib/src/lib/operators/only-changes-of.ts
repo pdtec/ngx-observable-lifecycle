@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { IOnChanges$, TypedChange, TypedChanges } from '../hooks/on-changes';
+import { IOnChanges$ } from '../hooks/on-changes';
+import { SimpleChange, SimpleChanges } from '@angular/core';
 
 /**
  * Observable operator for easier usage of {@see OnChanges$} and {@see IOnChanges$}. Only emits if the given property has changed.
@@ -23,12 +24,12 @@ import { IOnChanges$, TypedChange, TypedChanges } from '../hooks/on-changes';
  *
  * @param property name of the property
  */
-export function onlyChangesOf<T, P extends keyof T>(property: P): (source: Observable<TypedChanges<T>>) => Observable<TypedChange<T[P]>> {
-  return (source: Observable<TypedChanges<T>>) => {
+export function onlyChangesOf<T>(property: keyof T & string): (source: Observable<SimpleChanges>) => Observable<SimpleChange> {
+  return (source: Observable<SimpleChanges>) => {
     return source
       .pipe(
         map(changes => changes[property]),
-        filter(function typeGuard(x: TypedChange<T[P]> | undefined): x is TypedChange<T[P]> {
+        filter(function typeGuard(x: SimpleChange | undefined): x is SimpleChange {
           return x !== undefined;
         }),
       );
@@ -54,11 +55,11 @@ export function onlyChangesOf<T, P extends keyof T>(property: P): (source: Obser
  *
  * @param property name of the property
  */
-export function onlyCurrentValueOf<T, P extends keyof T>(property: P): (source: Observable<TypedChanges<T>>) => Observable<T[P]> {
-  return (source: Observable<TypedChanges<T>>) => {
+export function onlyCurrentValueOf<T, P extends keyof T & string>(property: P): (source: Observable<SimpleChanges>) => Observable<T[P]> {
+  return (source: Observable<SimpleChanges>) => {
     return source
       .pipe(
-        onlyChangesOf(property),
+        onlyChangesOf<T>(property),
         map(change => change.currentValue),
       );
   };
@@ -84,7 +85,7 @@ export function onlyCurrentValueOf<T, P extends keyof T>(property: P): (source: 
  * @param that object for property lookup
  * @param property name of the property to observe
  */
-export function input$<T extends IOnChanges$, P extends keyof T>(that: T, property: P) {
+export function input$<T extends IOnChanges$, P extends keyof T & string>(that: T, property: P): Observable<T[P]> {
   return that.ngOnChanges$.pipe(
     onlyCurrentValueOf(property)
   );
@@ -94,65 +95,65 @@ export function input$<T extends IOnChanges$, P extends keyof T>(that: T, proper
  * Observes the given property for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: T[X]}>;
 
 /**
  * Observes the given properties for changes (via OnChanges hook).
  * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
  */
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: T[X]}>;
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: T[X]}>;
 
 // Using var-args parameter breaks refactoring support. Renaming properties will not change the property passed to this function.
 // I don't think we need more than 9 parameters, so we comment out this option.
 // export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}>;
 
-export function inputs$<T, P extends keyof T>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}> {
+export function inputs$<T, P extends keyof T & string>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}> {
   return inputs$Impl(that, ...properties);
 }
 
-export function inputs$Impl<T, P extends keyof T>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}> {
+export function inputs$Impl<T, P extends keyof T & string>(that: T & IOnChanges$, ...properties: P[]): Observable<{ [X in P]: T[X]}> {
   return that.ngOnChanges$.pipe(
     filter(changes => {
       const change = properties.find(x => changes[x] !== undefined);

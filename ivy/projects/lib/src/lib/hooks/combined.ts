@@ -5,7 +5,7 @@ import { IAfterContentInit$ } from './after-content-init';
 import { IAfterViewChecked$ } from './after-view-checked';
 import { IAfterViewInit$ } from './after-view-init';
 import { IDoCheck$ } from './do-check';
-import { IOnChanges$, TypedChanges } from './on-changes';
+import { IOnChanges$ } from './on-changes';
 import { IOnDestroy$ } from './on-destroy';
 import { IOnInit$ } from './on-init';
 import { ObjectWithQueryList, viewChildren$ } from '../operators/view-children';
@@ -124,13 +124,13 @@ export class AllHooks$ implements IAfterContentChecked$, IAfterContentInit$, IAf
   }
 
   // just for type safety
-  private ngOnChangesSubject_!: ReplaySubject<TypedChanges<this>>;
+  private ngOnChangesSubject_!: ReplaySubject<SimpleChanges>;
 
   // initialize field in getter instead of constructor to be mixin friendly
   // getter is a property of the prototype and get's copied
   get ngOnChangesSubject() {
     if (this.ngOnChangesSubject_ === undefined) {
-      this.ngOnChangesSubject_ = new ReplaySubject<TypedChanges<this>>(1);
+      this.ngOnChangesSubject_ = new ReplaySubject(1);
       this.ngOnDestroy$.subscribe(() => this.ngOnChangesSubject_.complete());
     }
 
@@ -196,7 +196,7 @@ export class AllHooks$ implements IAfterContentChecked$, IAfterContentInit$, IAf
   /**
    * Observe the given property for changes.
    */
-  input$<P extends keyof this>(property: P): Observable<this[P]> {
+  input$<P extends keyof this & string>(property: P): Observable<this[P]> {
     return input$(this, property);
   }
 
@@ -205,61 +205,61 @@ export class AllHooks$ implements IAfterContentChecked$, IAfterContentInit$, IAf
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: this[X]}>;
 
   // Using var-args parameter breaks refactoring support. Renaming properties will not change the property passed to this method.
   // I don't think we need more than 9 parameters, so we comment out this option.
   // inputs$<P extends keyof this>(...properties: P[]): Observable<{ [X in P]: this[X]}>;
 
-  inputs$<P extends keyof this>(...properties: P[]) {
+  inputs$<P extends keyof this & string>(...properties: P[]) {
     return inputs$Impl(this, ...properties);
   }
 }
@@ -311,13 +311,13 @@ export class BaseHooks$ implements IOnInit$, IOnChanges$, IAfterViewInit$, IOnDe
   }
 
   // just for type safety
-  private ngOnChangesSubject_!: ReplaySubject<TypedChanges<this>>;
+  private ngOnChangesSubject_!: ReplaySubject<SimpleChanges>;
 
   // initialize field in getter instead of constructor to be mixin friendly
   // getter is a property of the prototype and get's copied
   get ngOnChangesSubject() {
     if (this.ngOnChangesSubject_ === undefined) {
-      this.ngOnChangesSubject_ = new ReplaySubject<TypedChanges<this>>(1);
+      this.ngOnChangesSubject_ = new ReplaySubject(1);
       this.ngOnDestroy$.subscribe(() => this.ngOnChangesSubject_.complete());
     }
 
@@ -361,8 +361,8 @@ export class BaseHooks$ implements IOnInit$, IOnChanges$, IAfterViewInit$, IOnDe
   /**
    * Observe the given property for changes.
    */
-  input$<P extends keyof this>(property: P): Observable<this[P]> {
-    return input$(this, property);
+  input$<P extends keyof this & string>(property: P): Observable<this[P]> {
+    return input$<this, P>(this, property);
   }
 
 
@@ -370,61 +370,61 @@ export class BaseHooks$ implements IOnInit$, IOnChanges$, IAfterViewInit$, IOnDe
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P): Observable<{ [X in P]: this[X]}>;
 
   /**
    * Observes the given properties for changes (via OnChanges hook).
    * Triggers only once for 'simultaneous' changes of multiple inputs. Simultaneous means during one change detection cycle.
    */
-  inputs$<P extends keyof this>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: this[X]}>;
+  inputs$<P extends keyof this & string>(p1: P, p2: P, p3: P, p4: P, p5: P, p6: P, p7: P, p8: P, p9: P): Observable<{ [X in P]: this[X]}>;
 
   // Using var-args parameter breaks refactoring support. Renaming properties will not change the property passed to this method.
   // I don't think we need more than 9 parameters, so we comment out this option.
   // inputs$<P extends keyof this>(...properties: P[]): Observable<{ [X in P]: this[X]}>;
 
-  inputs$<P extends keyof this>(...properties: P[]) {
+  inputs$<P extends keyof this & string>(...properties: P[]) {
     return inputs$Impl(this, ...properties);
   }
 }
