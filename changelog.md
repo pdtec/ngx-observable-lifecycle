@@ -1,5 +1,10 @@
 # ngx-observable-lifecycle Changelog
 
+## 4.0.0-beta.1
+
+* Updated to Angular 13 and drop support for older versions
+* Add support for RxJS 7
+
 ## 3.0.0
 
 * *TypedChanges* and *TypedChange* removed.
