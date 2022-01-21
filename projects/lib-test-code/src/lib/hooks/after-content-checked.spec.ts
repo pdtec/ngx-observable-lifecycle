@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AfterContentChecked, Component, ViewChild } from '@angular/core';
+import { AfterContentChecked, Component, NgModule, ViewChild } from '@angular/core';
 import { AfterContentChecked$ } from '@pdtec/ngx-observable-lifecycle';
+import { CommonModule } from '@angular/common';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library
@@ -15,11 +16,9 @@ describe('ngAfterContentChecked$ observable', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        TestSubComponent,
-        TestSubPlainComponent,
-      ]
+      imports: [
+        TestModule
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -103,3 +102,15 @@ class TestComponent {
   @ViewChild(TestSubPlainComponent, {static: true})
   plain!: TestSubPlainComponent;
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+  ],
+  declarations: [
+    TestComponent,
+    TestSubComponent,
+    TestSubPlainComponent,
+  ]
+})
+class TestModule {}

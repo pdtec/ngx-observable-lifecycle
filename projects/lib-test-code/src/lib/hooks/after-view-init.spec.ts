@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, NgModule, ViewChild } from '@angular/core';
 import { AfterViewInit$ } from '@pdtec/ngx-observable-lifecycle';
+import { CommonModule } from '@angular/common';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, called: number) {
   // first check on plain to ensure it works without the library
@@ -15,10 +16,8 @@ describe('ngAfterViewInit$ observable', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        TestSubComponent,
-        TestSubPlainComponent,
+      imports: [
+        TestModule,
       ]
     }).compileComponents();
 
@@ -100,3 +99,15 @@ class TestComponent {
     console.log(`TestComponent#constructor`);
   }
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+  ],
+  declarations: [
+    TestComponent,
+    TestSubComponent,
+    TestSubPlainComponent,
+  ]
+})
+class TestModule {}

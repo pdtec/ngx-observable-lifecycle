@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, NgModule, SimpleChanges } from '@angular/core';
 import { BaseHooks$ } from '@pdtec/ngx-observable-lifecycle';
+import { CommonModule } from '@angular/common';
 
 describe('BaseHooks$ observables', () => {
 
@@ -8,9 +9,8 @@ describe('BaseHooks$ observables', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        TestSubComponent,
+      imports: [
+        TestModule,
       ]
     }).compileComponents();
 
@@ -97,3 +97,14 @@ class TestComponent {
   ngOnDestroy$triggered = 0;
   ngAfterViewInit$triggered = 0;
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+  ],
+  declarations: [
+    TestComponent,
+    TestSubComponent,
+  ]
+})
+class TestModule {}

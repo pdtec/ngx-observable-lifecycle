@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { OnInit$ } from '@pdtec/ngx-observable-lifecycle';
+import { CommonModule } from '@angular/common';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library
@@ -15,10 +16,8 @@ describe('ngOnInit$ observable', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        TestSubComponent,
-        TestSubPlainComponent,
+      imports: [
+        TestModule,
       ]
     }).compileComponents();
 
@@ -112,3 +111,15 @@ class TestComponent {
   public ngOnInitCalled = 0;
   public ngOnInit$triggered = 0;
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+  ],
+  declarations: [
+    TestComponent,
+    TestSubComponent,
+    TestSubPlainComponent,
+  ]
+})
+class TestModule {}

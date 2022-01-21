@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, NgModule, OnDestroy } from '@angular/core';
 import { OnDestroy$ } from '@pdtec/ngx-observable-lifecycle';
+import { CommonModule } from '@angular/common';
 
 function checkCalls(fixture: ComponentFixture<TestComponent>, calls: number) {
   // first check on plain to ensure it works without the library
@@ -15,10 +16,8 @@ describe('ngOnDestroy$ observable', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        TestSubComponent,
-        TestSubPlainComponent,
+      imports: [
+        TestModule,
       ]
     }).compileComponents();
 
@@ -89,3 +88,15 @@ class TestComponent {
   public ngOnDestroyCalled = 0;
   public ngOnDestroy$triggered = 0;
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+  ],
+  declarations: [
+    TestComponent,
+    TestSubComponent,
+    TestSubPlainComponent,
+  ]
+})
+class TestModule {}

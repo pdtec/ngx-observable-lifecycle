@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs';
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, NgModule, QueryList, ViewChildren } from '@angular/core';
 import { AfterViewInit$AndOnDestroy$, viewChildren, viewChildren$ } from '@pdtec/ngx-observable-lifecycle';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
 
 describe('viewChildren operator', () => {
 
@@ -122,3 +123,14 @@ class TestComponent extends AfterViewInit$AndOnDestroy$ {
   @ViewChildren(TestSubComponent)
   public children: QueryList<TestSubComponent> | undefined;
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+  ],
+  declarations: [
+    TestComponent,
+    TestSubComponent,
+  ]
+})
+class TestModule {}
