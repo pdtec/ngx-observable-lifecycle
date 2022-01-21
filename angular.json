@@ -14,11 +14,6 @@
           "options": {
             "tsConfig": "projects/lib/tsconfig.lib.json",
             "project": "projects/lib/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/lib/tsconfig.lib.prod.json"
-            }
           }
         },
         "test": {
@@ -170,11 +165,6 @@
           "options": {
             "tsConfig": "projects/lib-test-code/tsconfig.lib.json",
             "project": "projects/lib-test-code/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/lib-test-code/tsconfig.lib.prod.json"
-            }
           }
         },
         "test": {
@@ -210,11 +200,6 @@
           "options": {
             "tsConfig": "projects/lib-demo-code/tsconfig.lib.json",
             "project": "projects/lib-demo-code/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/lib-demo-code/tsconfig.lib.prod.json"
-            }
           }
         },
         "test": {
