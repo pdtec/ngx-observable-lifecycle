@@ -1,6 +1,6 @@
 # ngx-observable-lifecycle Changelog
 
-## 4.0.0-beta.1
+## 4.0.0
 
 * Updated to Angular 13 and drop support for older versions
 * Add support for RxJS 7
