@@ -1,5 +1,9 @@
 # ngx-observable-lifecycle Changelog
 
+## 5.0.0
+
+* Updated to Angular 14 and drop support for older versions
+
 ## 4.0.0
 
 * Updated to Angular 13 and drop support for older versions
