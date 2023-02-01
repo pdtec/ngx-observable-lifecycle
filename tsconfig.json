@@ -22,16 +22,8 @@
     ],
     "paths": {
       "@pdtec/ngx-observable-lifecycle": [
-        "dist/lib/lib",
-        "dist/lib"
-      ],
-      "lib-test-code": [
-        "dist/lib-test-code/lib-test-code",
-        "dist/lib-test-code"
-      ],
-      "lib-demo-code": [
-        "dist/lib-demo-code/lib-demo-code",
-        "dist/lib-demo-code"
+        "dist/lib/build/lib",
+        "dist/lib/build"
       ]
     }
   },

@@ -1,0 +1,82 @@
+stages:
+  - build
+  - publish
+
+build:
+  stage: build
+  rules:
+    - if: $CI_BUILD_TAG || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: on_success
+  image: nexus.pdtec.lan:5500/linux-dotnet-sdk-nodejs:6.0-lts
+  tags:
+    - docker-linux
+  needs: []
+  variables:
+    ErrorActionPreference: stop
+  script:
+    - printenv
+    - |
+      npm config set loglevel warn --location=global
+      npm ci --no-audit
+      npm run lib:build
+      npm run demo:build
+      npm run lib:test -- --no-watch
+  artifacts:
+    paths:
+      - ./dist/lib/*
+    reports:
+      junit:
+        - "./dist/lib/test/**/*.xml"
+
+publish:
+  stage: publish
+  rules:
+    - if: $CI_BUILD_TAG
+      when: on_success
+  needs:
+    - job: build
+  image: nexus.pdtec.lan:5500/linux-dotnet-sdk-nodejs:6.0-lts
+  tags:
+    - docker-linux
+  script:
+    - printenv
+    - |
+      echo "append given npm auth token to .npmrc file"
+      echo $NPM_CREDENTIALS_PSW >> ~/.npmrc
+
+      npm config set loglevel warn --location=global
+
+      npm publish ./dist/lib/build --access=public
+
+extract-release-notes:
+  stage: publish
+  rules:
+    - if: $CI_BUILD_TAG
+      when: on_success
+  image: nexus.pdtec.lan:5500/linux-dotnet-sdk-nodejs:6.0-lts
+  tags:
+    - docker-linux
+  needs:
+    - job: publish
+  script:
+    - |
+      node scripts/get-release-notes >> release-notes.txt
+  artifacts:
+    paths:
+      - ./release-notes.txt
+
+create-gitlab-release:
+  stage: publish
+  rules:
+    - if: $CI_BUILD_TAG
+      when: on_success
+  image: nexus.pdtec.lan:5500/linux-gitlab-release-cli:latest
+  tags:
+    - docker-linux
+  needs:
+    - job: extract-release-notes
+  script:
+    - |
+      ReleaseName=`echo "$CI_BUILD_TAG" | cut -c2-`
+      ReleaseNotes=`cat release-notes.txt`
+      release-cli create --name "$ReleaseName" --description "$ReleaseNotes" --tag-name "$CI_BUILD_TAG"
