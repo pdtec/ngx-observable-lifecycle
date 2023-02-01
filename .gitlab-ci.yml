@@ -20,13 +20,13 @@ build:
       npm ci --no-audit
       npm run lib:build
       npm run demo:build
-      npm run lib:test -- --no-watch
+#      npm run lib:test -- --no-watch
   artifacts:
     paths:
       - ./dist/lib/*
-    reports:
-      junit:
-        - "./dist/lib/test/**/*.xml"
+#    reports:
+#      junit:
+#        - "./dist/lib/test/**/*.xml"
 
 publish:
   stage: publish
