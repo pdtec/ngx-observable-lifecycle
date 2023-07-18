@@ -5,7 +5,7 @@ stages:
 build:
   stage: build
   rules:
-    - if: $CI_BUILD_TAG || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_TAG || $CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "merge_request_event"
       when: on_success
   image: nexus.pdtec.lan:5500/linux-dotnet-sdk-nodejs:6.0-lts
   tags:
@@ -31,7 +31,7 @@ build:
 publish:
   stage: publish
   rules:
-    - if: $CI_BUILD_TAG
+    - if: $CI_COMMIT_TAG
       when: on_success
   needs:
     - job: build
@@ -51,7 +51,7 @@ publish:
 extract-release-notes:
   stage: publish
   rules:
-    - if: $CI_BUILD_TAG
+    - if: $CI_COMMIT_TAG
       when: on_success
   image: nexus.pdtec.lan:5500/linux-dotnet-sdk-nodejs:6.0-lts
   tags:
@@ -68,7 +68,7 @@ extract-release-notes:
 create-gitlab-release:
   stage: publish
   rules:
-    - if: $CI_BUILD_TAG
+    - if: $CI_COMMIT_TAG
       when: on_success
   image: nexus.pdtec.lan:5500/linux-gitlab-release-cli:latest
   tags:
@@ -77,6 +77,6 @@ create-gitlab-release:
     - job: extract-release-notes
   script:
     - |
-      ReleaseName=`echo "$CI_BUILD_TAG" | cut -c2-`
+      ReleaseName=`echo "$CI_COMMIT_TAG" | cut -c2-`
       ReleaseNotes=`cat release-notes.txt`
-      release-cli create --name "$ReleaseName" --description "$ReleaseNotes" --tag-name "$CI_BUILD_TAG"
+      release-cli create --name "$ReleaseName" --description "$ReleaseNotes" --tag-name "$CI_COMMIT_TAG"
