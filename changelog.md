@@ -1,3 +1,9 @@
+## 7.0.0
+
+* Updated to Angular 16 and drop support for older versions
+* Deprecate takeUntilDestroyed in favor of Angular's own implementation
+* Remove support for rxjs 6
+
 ## 6.0.0
 
 * Updated to Angular 15 and drop support for older versions
